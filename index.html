@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Học Tiếng Việt Tiểu Học</title>
+  
+  <!-- KẾT NỐI VỚI FILE MANIFEST -->
+  <link rel="manifest" href="./manifest.json">
+
+  <!-- Cấu hình PWA cho iOS Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="https://via.placeholder.com/192/f59e0b/ffffff?text=TV">
+
+  <!-- Thư viện Tailwind CSS & Font -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Quicksand', sans-serif;
+      -webkit-user-select: none; user-select: none;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    @keyframes pop { 0% { transform: scale(0.9); opacity: 0; } 100% { transform: scale(1); opacity: 1; } }
+    .animate-pop { animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
+    .animate-shake { animation: shake 0.3s ease-in-out; }
+    @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); } 100% { box-shadow: 0 0 0 15px rgba(245, 158, 11, 0); } }
+    .active-node { animation: pulse-ring 1.5s infinite; }
+    .hidden-view { display: none !important; }
+  </style>
+</head>
+<body class="bg-gradient-to-b from-[#e0f2fe] to-[#fef3c7] h-screen w-screen overflow-hidden flex flex-col items-center">
+
+  <!-- MÀN HÌNH BẢN ĐỒ -->
+  <div id="view-map" class="w-full h-full max-w-md flex flex-col relative animate-pop">
+    <header class="w-full p-4 z-10">
+      <div class="bg-white/90 backdrop-blur-md rounded-2xl p-3 flex justify-between items-center shadow-md border-b-4 border-amber-200">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-full bg-amber-100 border-2 border-amber-400 flex items-center justify-center text-2xl shadow-inner">👦🏻</div>
+          <div>
+            <h2 class="text-[10px] text-amber-700 font-bold uppercase tracking-wider">Sĩ tử tí hon</h2>
+            <p class="text-sm font-bold text-slate-800">Bé ngoan</p>
+          </div>
+        </div>
+        <div class="bg-amber-100 border border-amber-300 rounded-full py-1 px-3 flex items-center gap-1 shadow-sm">
+          <span class="text-base">⭐</span>
+          <span class="text-sm font-bold text-amber-800" id="global-score">0</span>
+        </div>
+      </div>
+    </header>
+
+    <main class="flex-grow w-full relative flex flex-col items-center justify-center -mt-10">
+      <svg class="absolute inset-0 w-full h-full pointer-events-none stroke-amber-400/50 stroke-[6] stroke-dasharray-[10,15]" fill="none" style="stroke-linecap: round;">
+        <path d="M 200, 100 Q 300, 250 200, 400 T 200, 600" />
+      </svg>
+      <div class="relative w-full flex flex-col gap-16 items-center">
+        <div class="flex flex-col items-center translate-x-12 opacity-60">
+          <div class="w-16 h-16 rounded-full bg-slate-300 border-4 border-slate-400 flex items-center justify-center text-2xl shadow-lg">🔒</div>
+          <div class="mt-2 bg-slate-400 text-white text-xs font-bold px-3 py-1 rounded-full">Đỉnh Ca Dao</div>
+        </div>
+        <div class="flex flex-col items-center -translate-x-10 relative">
+          <span class="absolute -top-6 bg-red-500 text-white text-[10px] font-bold px-2 py-1 rounded-full animate-bounce">Bé ở đây 📍</span>
+          <button onclick="app.startGame()" class="active-node w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-4 border-white flex items-center justify-center text-3xl shadow-xl active:scale-95 transition-transform">
+            🎮
+          </button>
+          <div class="mt-2 bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow-md">Luyện Từ Phức</div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- MÀN HÌNH TRÒ CHƠI -->
+  <div id="view-game" class="hidden-view w-full h-full max-w-md flex flex-col relative animate-pop bg-[#f0f9ff]">
+    <div class="p-4 flex items-center justify-between">
+      <button onclick="app.showMap()" class="w-10 h-10 bg-white rounded-full shadow flex items-center justify-center text-xl text-slate-600 active:scale-90">🔙</button>
+      <div class="flex-grow mx-4 h-4 bg-slate-200 rounded-full overflow-hidden shadow-inner">
+        <div id="progress-bar" class="h-full bg-gradient-to-r from-emerald-400 to-emerald-500 w-0 transition-all duration-300"></div>
+      </div>
+      <div class="font-bold text-slate-600 text-sm" id="progress-text">0/5</div>
+    </div>
+    <div class="flex-grow flex flex-col justify-center items-center p-6 w-full">
+      <p class="text-slate-500 font-bold mb-4 text-sm bg-white px-4 py-1 rounded-full shadow-sm">Đây là Từ Ghép hay Từ Láy?</p>
+      <div id="word-card" class="w-full max-w-[280px] aspect-square bg-white rounded-[2.5rem] shadow-2xl border-8 border-sky-300 flex flex-col items-center justify-center relative transition-transform">
+        <h1 id="current-word" class="text-4xl font-extrabold text-slate-800 tracking-tight">Từ Vựng</h1>
+        <button onclick="app.readWord()" class="absolute bottom-4 bg-sky-100 text-sky-600 px-4 py-2 rounded-full text-sm font-bold active:bg-sky-200 flex items-center gap-2">
+          <span>🔊</span> Nghe đọc
+        </button>
+      </div>
+    </div>
+    <div class="w-full p-6 grid grid-cols-2 gap-4 pb-10">
+      <button onclick="app.checkAnswer('ghep')" class="h-24 bg-gradient-to-b from-emerald-100 to-emerald-200 border-b-4 border-emerald-400 rounded-2xl flex flex-col items-center justify-center shadow-lg active:scale-95 active:border-b-0 active:translate-y-1 transition-all">
+        <span class="text-2xl mb-1">🧺</span>
+        <span class="font-bold text-emerald-800">TỪ GHÉP</span>
+      </button>
+      <button onclick="app.checkAnswer('lay')" class="h-24 bg-gradient-to-b from-amber-100 to-amber-200 border-b-4 border-amber-400 rounded-2xl flex flex-col items-center justify-center shadow-lg active:scale-95 active:border-b-0 active:translate-y-1 transition-all">
+        <span class="text-2xl mb-1">🧺</span>
+        <span class="font-bold text-amber-800">TỪ LÁY</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- MÀN HÌNH KẾT QUẢ -->
+  <div id="view-result" class="hidden-view fixed inset-0 w-full h-full bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-pop">
+    <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl flex flex-col items-center text-center">
+      <div class="text-6xl mb-2">🎉</div>
+      <h2 class="text-2xl font-extrabold text-amber-500 mb-2">Tuyệt Vời!</h2>
+      <p class="text-slate-600 font-bold mb-4">Bé nhận được <span class="text-amber-500 text-lg">+50 ⭐</span></p>
+      <div class="w-full bg-amber-50 rounded-xl p-4 text-left max-h-48 overflow-y-auto mb-6 border border-amber-100 text-sm">
+        <h3 class="font-bold text-amber-800 mb-2 border-b border-amber-200 pb-1">Ghi nhớ nhanh:</h3>
+        <ul id="summary-list" class="space-y-2 text-slate-700"></ul>
+      </div>
+      <button onclick="app.finishGame()" class="w-full bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold py-4 rounded-2xl shadow-lg active:scale-95 transition-transform text-lg">
+        Về Bản Đồ
+      </button>
+    </div>
+  </div>
+
+  <script>
+    // --- ĐĂNG KÝ SERVICE WORKER (Tạo App PWA) ---
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(registration => console.log('Service Worker đăng ký thành công:', registration.scope))
+          .catch(error => console.log('Đăng ký Service Worker thất bại:', error));
+      });
+    }
+
+    // Kho dữ liệu JSON
+    const database = [
+      { word: "học hành", type: "ghep", desc: "Cả 'học' và 'hành' đều có nghĩa." },
+      { word: "long lanh", type: "lay", desc: "Láy vần 'anh', chỉ ánh sáng." },
+      { word: "nhà cửa", type: "ghep", desc: "Hai từ chỉ công trình ghép lại." },
+      { word: "mếu máo", type: "lay", desc: "Láy âm đầu 'm', chỉ khuôn mặt." },
+      { word: "chăm chỉ", type: "lay", desc: "Láy âm 'ch', chỉ tính cách." }
+    ];
+
+    // Âm thanh giả lập
+    const AudioEngine = {
+      ctx: new (window.AudioContext || window.webkitAudioContext)(),
+      playTone(freq, type, duration) {
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = type;
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        gain.gain.setValueAtTime(0.1, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + duration);
+        osc.start();
+        osc.stop(this.ctx.currentTime + duration);
+      },
+      playCorrect() { this.playTone(600, 'sine', 0.1); setTimeout(() => this.playTone(800, 'sine', 0.2), 100); },
+      playWrong() { this.playTone(300, 'sawtooth', 0.3); }
+    };
+
+    // Logic Ứng dụng
+    const app = {
+      score: 0,
+      currentLevelData: [],
+      currentIndex: 0,
+      viewMap: document.getElementById('view-map'),
+      viewGame: document.getElementById('view-game'),
+      viewResult: document.getElementById('view-result'),
+      wordCard: document.getElementById('word-card'),
+      
+      init() {
+        this.score = parseInt(localStorage.getItem('tv_score')) || 0;
+        document.getElementById('global-score').innerText = this.score;
+        window.addEventListener('touchstart', () => {
+          if (AudioEngine.ctx.state === 'suspended') AudioEngine.ctx.resume();
+        }, { once: true });
+      },
+
+      showMap() {
+        this.viewGame.classList.add('hidden-view');
+        this.viewResult.classList.add('hidden-view');
+        this.viewMap.classList.remove('hidden-view');
+        document.getElementById('global-score').innerText = this.score;
+      },
+
+      startGame() {
+        this.viewMap.classList.add('hidden-view');
+        this.viewGame.classList.remove('hidden-view');
+        this.currentLevelData = [...database].sort(() => Math.random() - 0.5);
+        this.currentIndex = 0;
+        this.updateUI();
+      },
+
+      updateUI() {
+        const item = this.currentLevelData[this.currentIndex];
+        document.getElementById('current-word').innerText = item.word;
+        const percent = ((this.currentIndex) / this.currentLevelData.length) * 100;
+        document.getElementById('progress-bar').style.width = percent + '%';
+        document.getElementById('progress-text').innerText = `${this.currentIndex + 1}/${this.currentLevelData.length}`;
+        this.wordCard.className = "w-full max-w-[280px] aspect-square bg-white rounded-[2.5rem] shadow-2xl border-8 border-sky-300 flex flex-col items-center justify-center relative transition-transform animate-pop";
+        setTimeout(() => this.readWord(), 300);
+      },
+
+      checkAnswer(userChoice) {
+        const currentData = this.currentLevelData[this.currentIndex];
+        if (userChoice === currentData.type) {
+          AudioEngine.playCorrect();
+          this.currentIndex++;
+          if (this.currentIndex < this.currentLevelData.length) {
+            this.updateUI();
+          } else {
+            this.showResult();
+          }
+        } else {
+          AudioEngine.playWrong();
+          this.wordCard.classList.remove('animate-pop');
+          void this.wordCard.offsetWidth; 
+          this.wordCard.classList.add('animate-shake', 'border-red-400');
+          setTimeout(() => this.wordCard.classList.remove('animate-shake', 'border-red-400'), 300);
+        }
+      },
+
+      readWord() {
+        const word = this.currentLevelData[this.currentIndex].word;
+        if ('speechSynthesis' in window) {
+          window.speechSynthesis.cancel();
+          const utterance = new SpeechSynthesisUtterance(word);
+          utterance.lang = 'vi-VN';
+          utterance.rate = 1.0;
+          window.speechSynthesis.speak(utterance);
+        }
+      },
+
+      showResult() {
+        this.viewGame.classList.add('hidden-view');
+        this.viewResult.classList.remove('hidden-view');
+        AudioEngine.playCorrect();
+        const list = document.getElementById('summary-list');
+        list.innerHTML = '';
+        this.currentLevelData.forEach(item => {
+          list.innerHTML += `<li class="mb-1"><b>${item.word}</b>: ${item.desc}</li>`;
+        });
+        this.score += 50;
+        localStorage.setItem('tv_score', this.score);
+      },
+
+      finishGame() {
+        this.showMap();
+      }
+    };
+
+    app.init();
+  </script>
+</body>
+</html>

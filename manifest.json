@@ -1,0 +1,21 @@
+{
+  "name": "Học Tiếng Việt Tiểu Học",
+  "short_name": "Tiếng Việt",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#fef3c7",
+  "theme_color": "#f59e0b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192/f59e0b/ffffff?text=TV",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512/f59e0b/ffffff?text=TV",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
