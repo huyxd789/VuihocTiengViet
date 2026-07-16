@@ -24,9 +24,7 @@
 </head>
 <body class="bg-gradient-to-b from-[#f0f9ff] to-[#e0f2fe] h-screen w-screen overflow-hidden flex flex-col items-center relative text-slate-800">
 
-  <!-- ========================================== -->
-  <!-- 1. MÀN HÌNH CHÀO (WELCOME)                 -->
-  <!-- ========================================== -->
+  <!-- 1. MÀN HÌNH CHÀO -->
   <div id="view-welcome" class="welcome-bg w-full h-full max-w-md flex flex-col items-center justify-center relative animate-pop z-50">
     <div class="cloud w-32 h-10 top-10 left-[-20px] blur-[2px]"></div>
     <div class="cloud w-40 h-12 top-24 right-[-30px] blur-[1px]"></div>
@@ -39,9 +37,7 @@
     </button>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 2. MÀN HÌNH CHÍNH (DASHBOARD CATEGORIES)  -->
-  <!-- ========================================== -->
+  <!-- 2. MÀN HÌNH CHÍNH -->
   <div id="view-dashboard" class="hidden-view w-full h-full max-w-md flex flex-col animate-pop bg-[#f8fafc]">
     <header class="bg-white px-5 pt-6 pb-4 shadow-sm rounded-b-3xl flex justify-between items-center z-10">
       <div class="flex items-center gap-3">
@@ -71,9 +67,7 @@
     </nav>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 3. MÀN HÌNH DANH SÁCH CHỦ ĐỀ & BÀI HỌC     -->
-  <!-- ========================================== -->
+  <!-- 3. MÀN HÌNH CHỦ ĐỀ & BÀI HỌC -->
   <div id="view-subcategories" class="hidden-view w-full h-full max-w-md flex flex-col animate-pop bg-[#f0f9ff]">
     <header class="bg-white px-4 py-4 shadow-sm flex items-center gap-3 z-10">
       <button onclick="app.showDashboard()" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-xl active:bg-slate-200 shadow-sm">🔙</button>
@@ -84,9 +78,7 @@
     </main>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 4. MÀN HÌNH TRÒ CHƠI & BÀI LÀM ĐỘNG        -->
-  <!-- ========================================== -->
+  <!-- 4. MÀN HÌNH TRÒ CHƠI -->
   <div id="view-game" class="hidden-view w-full h-full max-w-md flex flex-col relative animate-pop bg-[#f0f9ff]">
     <div class="p-4 flex items-center justify-between">
       <button onclick="app.backToSubcategories()" class="w-10 h-10 bg-white rounded-full shadow flex items-center justify-center text-xl text-slate-600 active:scale-90">✖</button>
@@ -108,9 +100,7 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- 5. MÀN HÌNH KẾT QUẢ                        -->
-  <!-- ========================================== -->
+  <!-- 5. MÀN HÌNH KẾT QUẢ -->
   <div id="view-result" class="hidden-view fixed inset-0 w-full h-full bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl flex flex-col items-center text-center animate-pop">
       <div class="text-6xl mb-2">🎉</div>
@@ -124,9 +114,7 @@
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- MODAL ĐÁNH GIÁ (SỔ LIÊN LẠC)               -->
-  <!-- ========================================== -->
+  <!-- SỔ LIÊN LẠC -->
   <div id="modal-eval" class="hidden-view fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-[2rem] p-6 shadow-2xl animate-pop">
       <div class="text-center mb-4">
@@ -157,7 +145,6 @@
     const app = {
       db: null,
       stats: { score: 0, completedLessons: {}, errorLog: {} },
-      sessionPools: {}, // BỘ NHỚ LƯU TRỮ TRẠNG THÁI XÁO BÀI TRONG PHIÊN LÀM VIỆC
       currentCatId: null,
       currentSubConfig: null,
       currentLessonKey: null,
@@ -175,11 +162,11 @@
             throw new Error('Cấu trúc JSON không hợp lệ');
           }
         } catch (e) {
-          alert("LỖI KẾT NỐI DỮ LIỆU: Không thể tải database.json. Hãy chắc chắn bạn đã đưa file database.json chuẩn lên Github.");
+          alert("LỖI KẾT NỐI DỮ LIỆU: Không thể tải database.json. Hãy chắc chắn bạn đã đưa file database.json lên Github và không bị lỗi cú pháp.");
           return; 
         }
 
-        const savedStats = localStorage.getItem('tv_stats_v8');
+        const savedStats = localStorage.getItem('tv_stats_v9');
         if(savedStats) {
           this.stats = JSON.parse(savedStats);
           this.showDashboard();
@@ -190,7 +177,7 @@
       },
 
       saveStats() {
-        localStorage.setItem('tv_stats_v8', JSON.stringify(this.stats));
+        localStorage.setItem('tv_stats_v9', JSON.stringify(this.stats));
         document.getElementById('global-score').innerText = this.stats.score;
       },
 
@@ -254,7 +241,7 @@
             <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-100">
               <div class="flex justify-between items-end mb-4">
                 <h4 class="font-extrabold text-slate-700 text-[15px] border-l-4 border-amber-400 pl-3 leading-tight">${sub.name}</h4>
-                <span class="text-[10px] font-bold bg-sky-50 text-sky-600 px-2 py-1 rounded-md border border-sky-100">Kho: ${poolSize} câu</span>
+                <span class="text-[10px] font-bold ${poolSize < 10 ? 'bg-red-50 text-red-500 border-red-200' : 'bg-sky-50 text-sky-600 border-sky-100'} px-2 py-1 rounded-md border">Kho: ${poolSize} câu</span>
               </div>
               <div class="flex gap-3 overflow-x-auto pb-2 pr-4 snap-x">
                 ${lessonButtonsHtml}
@@ -270,7 +257,7 @@
         this.openCategory(this.currentCatId); 
       },
 
-      // THUẬT TOÁN "CHIA BÀI" - ĐẢM BẢO BÀI 1 VÀ BÀI 2 KHÔNG BAO GIỜ TRÙNG CÂU HỎI
+      // THUẬT TOÁN XÁO BÀI ĐÃ ĐƯỢC THIẾT KẾ LẠI ĐỂ LUÔN TẠO RA BÀI KHÁC NHAU
       startLesson(subId, lessonNumber) {
         let subConfig = null;
         this.db.categories.forEach(cat => {
@@ -278,42 +265,24 @@
           if(found) subConfig = found;
         });
 
-        let basePool = this.db.questions.filter(q => q.skill === subConfig.skill);
-        if(basePool.length === 0) {
-          alert(`Chủ đề này chưa có dữ liệu. Ba mẹ hãy mở file database.json và nhập câu hỏi có skill là "${subConfig.skill}" nhé!`);
+        let pool = this.db.questions.filter(q => q.skill === subConfig.skill);
+        
+        if(pool.length === 0) {
+          alert(`Chủ đề này chưa có câu hỏi nào. Bạn hãy mở file database.json và thêm vào nhé!`);
           return;
         }
 
-        // BƯỚC 1: XÁO TRỘN TOÀN BỘ KHO 1 LẦN DUY NHẤT LÚC MỞ APP
-        if (!this.sessionPools[subId]) {
-          let shuffled = JSON.parse(JSON.stringify(basePool));
-          for (let i = shuffled.length - 1; i > 0; i--) {
-              const j = Math.floor(Math.random() * (i + 1));
-              [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-          }
-          this.sessionPools[subId] = shuffled; // Lưu mảng đã xáo trộn vào RAM
-        }
-
-        let pool = this.sessionPools[subId];
-
-        // BƯỚC 2: CHIA BÀI (Bài 1 lấy câu 1-10, Bài 2 lấy câu 11-20...)
-        const questionsPerLesson = 10;
-        const startIndex = ((lessonNumber - 1) * questionsPerLesson) % pool.length;
-        const takeCount = Math.min(questionsPerLesson, pool.length);
-        
-        let lessonQuestions = [];
-        for(let i = 0; i < takeCount; i++) {
-            let idx = (startIndex + i) % pool.length; // Vòng lặp xoay vòng nếu hết câu hỏi
-            lessonQuestions.push(pool[idx]);
-        }
-
-        // BƯỚC 3: XÁO TRỘN LẠI 10 CÂU CỦA BÀI NÀY ĐỂ HIỂN THỊ NGẪU NHIÊN
-        for (let i = lessonQuestions.length - 1; i > 0; i--) {
+        // BƯỚC QUAN TRỌNG: MỖI LẦN BẤM VÀO MỘT BÀI, XÁO TRỘN TOÀN BỘ KHO ĐÓ LÊN
+        let shuffledPool = JSON.parse(JSON.stringify(pool));
+        for (let i = shuffledPool.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
-            [lessonQuestions[i], lessonQuestions[j]] = [lessonQuestions[j], lessonQuestions[i]];
+            [shuffledPool[i], shuffledPool[j]] = [shuffledPool[j], shuffledPool[i]];
         }
         
-        this.currentQuestions = lessonQuestions;
+        // Rút ra 10 câu đầu tiên của cái đống vừa xáo (Nên bài nào cũng sẽ bốc ngẫu nhiên)
+        const takeCount = Math.min(10, shuffledPool.length);
+        this.currentQuestions = shuffledPool.slice(0, takeCount);
+        
         this.currentSubConfig = subConfig;
         this.currentLessonKey = `${subConfig.id}_bai${lessonNumber}`;
         this.currentIndex = 0;
