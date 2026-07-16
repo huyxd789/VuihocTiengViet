@@ -16,12 +16,12 @@
     .animate-pop { animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
     @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
     .animate-shake { animation: shake 0.3s ease-in-out; }
-    /* Nền welcome */
     .welcome-bg { background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 100%); position: relative; overflow: hidden; }
     .cloud { position: absolute; background: white; border-radius: 50px; opacity: 0.8; }
-    /* Nút bài học */
-    .lesson-btn { transition: all 0.2s; }
-    .lesson-btn:active { transform: scale(0.95); }
+    
+    /* Giao diện nút đáp án động */
+    .answer-btn { transition: all 0.2s; border-bottom-width: 4px; }
+    .answer-btn:active { transform: scale(0.95) translateY(2px); border-bottom-width: 0px; margin-top: 4px;}
   </style>
 </head>
 <body class="bg-gradient-to-b from-[#f0f9ff] to-[#e0f2fe] h-screen w-screen overflow-hidden flex flex-col items-center relative text-slate-800">
@@ -38,7 +38,7 @@
     <h1 class="text-4xl font-extrabold text-white text-center drop-shadow-md mb-2 leading-tight">Vui Học<br>Tiếng Việt</h1>
     <p class="text-sky-100 font-bold text-lg mb-10 drop-shadow">Chương trình Tiểu học</p>
     
-    <button onclick="app.enterDashboard()" class="z-10 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-extrabold text-xl py-4 px-12 rounded-[2rem] shadow-xl active:scale-90 transition-transform border-b-4 border-orange-600 flex items-center gap-2">
+    <button onclick="app.showDashboard()" class="z-10 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-extrabold text-xl py-4 px-12 rounded-[2rem] shadow-xl active:scale-90 transition-transform border-b-4 border-orange-600 flex items-center gap-2">
       Bắt Đầu Học 🚀
     </button>
   </div>
@@ -47,8 +47,6 @@
   <!-- 2. MÀN HÌNH CHÍNH (DASHBOARD CATEGORIES)  -->
   <!-- ========================================== -->
   <div id="view-dashboard" class="hidden-view w-full h-full max-w-md flex flex-col animate-pop bg-[#f8fafc]">
-    
-    <!-- Header -->
     <header class="bg-white px-5 pt-6 pb-4 shadow-sm rounded-b-3xl flex justify-between items-center z-10">
       <div class="flex items-center gap-3">
         <div class="w-12 h-12 bg-sky-100 rounded-full flex items-center justify-center text-2xl border-2 border-sky-300">👦🏻</div>
@@ -62,21 +60,19 @@
       </div>
     </header>
 
-    <!-- Danh sách Danh mục chính -->
     <main class="flex-grow overflow-y-auto p-5 pb-24">
-      <h3 class="text-lg font-extrabold text-slate-700 mb-4">Các Nội Dung Chính</h3>
+      <h3 class="text-lg font-extrabold text-slate-700 mb-4 border-l-4 border-sky-400 pl-3">Kho Tàng Kiến Thức</h3>
       <div id="category-list" class="grid grid-cols-1 gap-4">
-        <!-- Render bằng JS -->
+        <!-- Render Động Các Phân Môn Từ JS -->
       </div>
     </main>
 
-    <!-- Bottom Navigation Bar -->
     <nav class="absolute bottom-0 w-full max-w-md bg-white border-t border-slate-200 px-6 py-3 flex justify-between items-center pb-safe">
-      <button onclick="app.showDashboard()" class="flex flex-col items-center text-sky-500">
+      <button class="flex flex-col items-center text-sky-500">
         <span class="text-2xl">🏠</span><span class="text-[10px] font-bold mt-1">Trang chủ</span>
       </button>
       <button onclick="app.showEvaluation()" class="flex flex-col items-center text-slate-400 hover:text-sky-500 transition-colors">
-        <span class="text-2xl">📊</span><span class="text-[10px] font-bold mt-1">Đánh giá</span>
+        <span class="text-2xl">📊</span><span class="text-[10px] font-bold mt-1">Sổ liên lạc</span>
       </button>
     </nav>
   </div>
@@ -91,15 +87,16 @@
     </header>
     <main class="flex-grow overflow-y-auto p-4">
       <div id="subcategory-list" class="flex flex-col gap-6 pb-10">
-        <!-- Render chủ đề và 15 bài học bằng JS -->
+        <!-- Render Động Chủ Đề & 15 Bài Học -->
       </div>
     </main>
   </div>
 
   <!-- ========================================== -->
-  <!-- 4. MÀN HÌNH TRÒ CHƠI (GAMEPLAY)            -->
+  <!-- 4. MÀN HÌNH TRÒ CHƠI & BÀI LÀM ĐỘNG        -->
   <!-- ========================================== -->
   <div id="view-game" class="hidden-view w-full h-full max-w-md flex flex-col relative animate-pop bg-[#f0f9ff]">
+    
     <div class="p-4 flex items-center justify-between">
       <button onclick="app.backToSubcategories()" class="w-10 h-10 bg-white rounded-full shadow flex items-center justify-center text-xl text-slate-600 active:scale-90">✖</button>
       <div class="flex-grow mx-4 h-4 bg-slate-200 rounded-full overflow-hidden">
@@ -108,28 +105,26 @@
       <div class="font-bold text-slate-600 text-sm" id="progress-text">0/10</div>
     </div>
     
-    <div class="flex-grow flex flex-col justify-center items-center p-6 w-full">
-      <p id="game-prompt" class="text-slate-500 font-bold mb-4 text-sm bg-white px-4 py-1 rounded-full shadow-sm text-center">Câu hỏi?</p>
-      <div id="word-card" class="w-full max-w-[280px] aspect-square bg-white rounded-[2.5rem] shadow-2xl border-8 border-sky-300 flex flex-col items-center justify-center relative transition-transform">
-        <h1 id="current-word" class="text-3xl font-extrabold text-slate-800 tracking-tight text-center px-4 leading-relaxed">Từ Vựng</h1>
-        <button onclick="app.readWord()" class="absolute bottom-4 bg-sky-100 text-sky-600 px-4 py-2 rounded-full text-sm font-bold active:bg-sky-200 flex items-center gap-2">
+    <div class="flex-grow flex flex-col justify-start items-center p-4 w-full overflow-y-auto">
+      <p id="game-prompt" class="text-slate-500 font-bold mb-4 text-sm bg-white px-4 py-1 rounded-full shadow-sm text-center border border-slate-100">Câu hỏi?</p>
+      
+      <!-- Khung hiển thị Từ vựng / Đoạn văn -->
+      <div id="word-card" class="w-full bg-white rounded-[2rem] shadow-xl border-4 border-sky-300 flex flex-col items-center justify-center relative transition-transform min-h-[160px] p-6 mb-6">
+        <h1 id="current-word" class="text-2xl font-extrabold text-slate-800 text-center leading-relaxed">Nội dung câu hỏi</h1>
+        <button onclick="app.readWord()" class="mt-4 bg-sky-100 text-sky-600 px-4 py-2 rounded-full text-sm font-bold active:bg-sky-200 flex items-center gap-2 shadow-sm border border-sky-200">
           <span>🔊</span> Nghe đọc
         </button>
       </div>
-    </div>
-    
-    <div class="w-full p-6 grid grid-cols-2 gap-4 pb-10">
-      <button onclick="app.checkAnswer('left')" class="h-24 bg-gradient-to-b from-emerald-100 to-emerald-200 border-b-4 border-emerald-400 rounded-2xl flex flex-col items-center justify-center shadow-lg active:scale-95 active:border-b-0 active:translate-y-1 transition-all">
-        <span id="btn-left-text" class="font-bold text-emerald-800 px-2 text-center text-sm md:text-base">TRÁI</span>
-      </button>
-      <button onclick="app.checkAnswer('right')" class="h-24 bg-gradient-to-b from-amber-100 to-amber-200 border-b-4 border-amber-400 rounded-2xl flex flex-col items-center justify-center shadow-lg active:scale-95 active:border-b-0 active:translate-y-1 transition-all">
-        <span id="btn-right-text" class="font-bold text-amber-800 px-2 text-center text-sm md:text-base">PHẢI</span>
-      </button>
+
+      <!-- Lưới nút Đáp án tự động thay đổi dựa trên dạng bài -->
+      <div id="answers-grid" class="w-full grid gap-3 pb-6">
+        <!-- Render nút A B C D bằng JS -->
+      </div>
     </div>
   </div>
 
   <!-- ========================================== -->
-  <!-- 5. MÀN HÌNH HOÀN THÀNH BÀI                 -->
+  <!-- 5. MÀN HÌNH KẾT QUẢ                        -->
   <!-- ========================================== -->
   <div id="view-result" class="hidden-view fixed inset-0 w-full h-full bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl flex flex-col items-center text-center animate-pop">
@@ -137,7 +132,6 @@
       <h2 class="text-2xl font-extrabold text-amber-500 mb-2">Hoàn thành bài!</h2>
       <p class="text-slate-600 font-bold mb-4">Bé nhận được <span class="text-amber-500">+50 ⭐</span></p>
       
-      <!-- Bảng giải nghĩa rút gọn -->
       <div class="w-full bg-amber-50 rounded-xl p-4 text-left max-h-48 overflow-y-auto mb-6 border border-amber-100 text-sm">
         <h3 class="font-bold text-amber-800 mb-2 border-b border-amber-200 pb-1">Ghi nhớ nhanh:</h3>
         <ul id="summary-list" class="space-y-2 text-slate-700"></ul>
@@ -154,54 +148,87 @@
     <div class="bg-white w-full max-w-md rounded-[2rem] p-6 shadow-2xl animate-pop">
       <div class="text-center mb-4">
         <div class="text-5xl mb-2">📊</div>
-        <h3 class="text-xl font-bold text-sky-600">Báo Cáo Năng Lực</h3>
+        <h3 class="text-xl font-bold text-sky-600">Sổ Liên Lạc Đánh Giá</h3>
       </div>
       <div id="eval-content" class="bg-sky-50 rounded-xl p-4 text-sm text-slate-700 h-64 overflow-y-auto border border-sky-100 space-y-3"></div>
-      <button onclick="document.getElementById('modal-eval').classList.add('hidden-view')" class="mt-4 w-full bg-sky-500 text-white font-bold py-3 rounded-2xl active:scale-95">Đóng</button>
+      <button onclick="document.getElementById('modal-eval').classList.add('hidden-view')" class="mt-4 w-full bg-sky-500 text-white font-bold py-3 rounded-2xl active:scale-95">Đóng Sổ</button>
     </div>
   </div>
 
-  <!-- ========================================== -->
-  <!-- KỊCH BẢN LOGIC ĐÃ ĐƯỢC XÂY DỰNG LẠI        -->
-  <!-- ========================================== -->
   <script>
-    // 1. Dữ liệu mặc định (Bọc lỗi an toàn nếu database.json không tồn tại)
-    const fallbackDB = {
+    // --- KHỐI DỮ LIỆU ĐƯỢC MỞ RỘNG (Gồm 5 Phân môn chính) ---
+    const internalDB = {
       categories: [
         {
-          id: "cat_tuvung", name: "Luyện Từ Vựng", icon: "📚", color: "from-blue-400 to-blue-500",
+          id: "c1", name: "Luyện Từ Vựng", icon: "📚", color: "from-blue-400 to-blue-500",
           subcategories: [
-            { id: "sub_tughep", name: "Phân Biệt Từ Ghép", skill: "tu_ghep", lessons: 15, type: "classification", btnLeft: "TỪ GHÉP", btnRight: "TỪ LÁY", prompt: "Đây là Từ Ghép hay Từ Láy?" },
-            { id: "sub_tulay", name: "Phân Biệt Từ Láy", skill: "tu_lay", lessons: 15, type: "classification", btnLeft: "TỪ LÁY", btnRight: "TỪ KHÁC", prompt: "Đây là Từ Láy hay không?" },
-            { id: "sub_dongnghia", name: "Từ Đồng Nghĩa", skill: "dong_nghia", lessons: 10, type: "classification", btnLeft: "ĐỒNG NGHĨA", btnRight: "TRÁI NGHĨA", prompt: "Hai từ này Đồng nghĩa hay Trái nghĩa?" },
-            { id: "sub_trainghia", name: "Từ Trái Nghĩa", skill: "trai_nghia", lessons: 10, type: "classification", btnLeft: "TRÁI NGHĨA", btnRight: "ĐỒNG NGHĨA", prompt: "Hai từ này Trái nghĩa hay Đồng nghĩa?" },
-            { id: "sub_tonghop", name: "Ôn Tập Tổng Hợp", skill: "tong_hop", lessons: 15, type: "classification", btnLeft: "TỪ GHÉP", btnRight: "TỪ LÁY", prompt: "Phân loại từ phức sau:" }
+            { id: "s1_1", name: "Phân biệt Từ Ghép", skill: "tu_ghep", lessons: 15, prompt: "Đây là Từ Ghép hay Từ Láy?" },
+            { id: "s1_2", name: "Phân biệt Từ Láy", skill: "tu_lay", lessons: 15, prompt: "Phân loại từ phức sau đây:" },
+            { id: "s1_3", name: "Từ Đồng Nghĩa", skill: "dong_nghia", lessons: 15, prompt: "Hai từ này có quan hệ gì?" },
+            { id: "s1_4", name: "Từ Trái Nghĩa", skill: "trai_nghia", lessons: 15, prompt: "Hai từ này có quan hệ gì?" }
           ]
         },
         {
-          id: "cat_cadao", name: "Ca Dao Tục Ngữ", icon: "🌾", color: "from-emerald-400 to-green-500",
+          id: "c2", name: "Ca Dao & Tục Ngữ", icon: "🌾", color: "from-emerald-400 to-green-500",
           subcategories: [
-            { id: "sub_cd_gd", name: "Chủ đề Gia Đình", skill: "ca_dao_gd", lessons: 10, type: "quiz", prompt: "Điền vào chỗ trống:" },
-            { id: "sub_tn_daoly", name: "Đạo Lý Làm Người", skill: "tuc_ngu", lessons: 10, type: "quiz", prompt: "Điền vào chỗ trống:" }
+            { id: "s2_1", name: "Chủ đề: Gia đình", skill: "cd_giadinh", lessons: 15, prompt: "Chọn đáp án đúng điền vào câu ca dao:" },
+            { id: "s2_2", name: "Chủ đề: Đạo lý", skill: "cd_daoly", lessons: 15, prompt: "Hoàn thành câu tục ngữ sau:" },
+            { id: "s2_3", name: "Chủ đề: Tôn sư", skill: "cd_tonsu", lessons: 15, prompt: "Hoàn thành câu sau:" }
+            // Bạn có thể thêm s2_4, s2_5... tới 30 chủ đề ở đây
+          ]
+        },
+        {
+          id: "c3", name: "Ngữ Pháp & Từ Loại", icon: "🧩", color: "from-amber-400 to-orange-500",
+          subcategories: [
+            { id: "s3_1", name: "Nhận diện Danh Từ", skill: "danh_tu", lessons: 10, prompt: "Từ được in hoa thuộc từ loại nào?" },
+            { id: "s3_2", name: "Nhận diện Động Từ", skill: "dong_tu", lessons: 10, prompt: "Từ được in hoa thuộc từ loại nào?" },
+            { id: "s3_3", name: "Giới từ & Trạng từ", skill: "trang_tu", lessons: 10, prompt: "Xác định từ loại trong câu:" }
+          ]
+        },
+        {
+          id: "c4", name: "Biện Pháp Tu Từ", icon: "🎭", color: "from-purple-400 to-pink-500",
+          subcategories: [
+            { id: "s4_1", name: "Phép So Sánh", skill: "so_sanh", lessons: 10, prompt: "Câu văn này sử dụng biện pháp gì?" },
+            { id: "s4_2", name: "Phép Nhân Hóa", skill: "nhan_hoa", lessons: 10, prompt: "Phát hiện biện pháp tu từ:" }
+          ]
+        },
+        {
+          id: "c5", name: "Đọc Hiểu & Điền Khuyết", icon: "📝", color: "from-teal-400 to-emerald-500",
+          subcategories: [
+            { id: "s5_1", name: "Điền từ vào đoạn văn", skill: "dien_khuyet", lessons: 10, prompt: "Đọc đoạn văn và điền từ thích hợp vào chỗ (...)" }
           ]
         }
       ],
       questions: [
-        // Một vài dữ liệu mẫu để chống sập web
-        { skill: "tu_ghep", word: "nhà cửa", correct: "left", desc: "Hai từ có nghĩa ghép lại." },
-        { skill: "tu_ghep", word: "long lanh", correct: "right", desc: "Đây là từ láy." },
-        { skill: "tu_lay", word: "rầm rập", correct: "left", desc: "Láy toàn bộ âm." },
-        { skill: "tu_lay", word: "sách vở", correct: "right", desc: "Đây là từ ghép." },
-        { skill: "ca_dao_gd", word: "Công cha như núi...", correct: "left", btnLeft: "Thái Sơn", btnRight: "biển rộng", desc: "Ca ngợi công lao to lớn của cha." }
+        // Dạng 1: Phân loại 2 đáp án (Từ vựng)
+        { skill: "tu_ghep", word: "học hành", type: "2_options", options: ["TỪ GHÉP", "TỪ LÁY"], correct: "0", desc: "Hai từ đứng riêng đều có nghĩa." },
+        { skill: "tu_ghep", word: "nhà cửa", type: "2_options", options: ["TỪ GHÉP", "TỪ LÁY"], correct: "0", desc: "Ghép bởi 2 tiếng có nghĩa." },
+        { skill: "tu_lay", word: "mếu máo", type: "2_options", options: ["TỪ GHÉP", "TỪ LÁY"], correct: "1", desc: "Láy phụ âm đầu 'm'." },
+        { skill: "tu_lay", word: "long lanh", type: "2_options", options: ["TỪ GHÉP", "TỪ LÁY"], correct: "1", desc: "Láy vần 'anh'." },
+        { skill: "dong_nghia", word: "To lớn - Vĩ đại", type: "2_options", options: ["ĐỒNG NGHĨA", "TRÁI NGHĨA"], correct: "0", desc: "Hai từ này có nghĩa tương đồng nhau." },
+        
+        // Dạng 2: Trắc nghiệm 4 đáp án MCQ (Ca dao, Ngữ pháp, Tu từ)
+        { skill: "cd_giadinh", word: "Công cha như núi Thái Sơn\nNghĩa mẹ như nước (...) chảy ra.", type: "mcq", options: ["Trong nguồn", "Ngoài biển", "Trên trời", "Dưới suối"], correct: "0", desc: "Câu ca dao hoàn chỉnh: Nghĩa mẹ như nước trong nguồn chảy ra." },
+        { skill: "cd_daoly", word: "Đói cho sạch, rách cho (...)", type: "mcq", options: ["Đẹp", "Thơm", "Mới", "Lành"], correct: "1", desc: "Khuyên ta dù khó khăn vẫn phải giữ phẩm chất." },
+        { skill: "danh_tu", word: "Cái BÀN này rất đẹp.", type: "mcq", options: ["Danh từ", "Động từ", "Tính từ", "Đại từ"], correct: "0", desc: "Bàn là danh từ chỉ sự vật." },
+        { skill: "dong_tu", word: "Đàn chim đang BAY trên trời.", type: "mcq", options: ["Danh từ", "Động từ", "Tính từ", "Giới từ"], correct: "1", desc: "Bay là động từ chỉ hoạt động." },
+        { skill: "so_sanh", word: "Trẻ em NHƯ búp trên cành.", type: "mcq", options: ["So sánh", "Nhân hóa", "Ẩn dụ", "Hoán dụ"], correct: "0", desc: "Dùng từ 'như' để đối chiếu trẻ em với búp trên cành." },
+        
+        // Dạng 3: Điền đoạn văn dài
+        { skill: "dien_khuyet", word: "Mùa xuân đã về. Trăm hoa đua (...), chim chóc hót líu lo.", type: "mcq", options: ["Nở", "Sắc", "Tươi", "Rụng"], correct: "0", desc: "Thành ngữ: Trăm hoa đua nở." }
+        
+        // BẠN HÃY THÊM HÀNG NGHÀN CÂU HỎI VÀO ĐÂY, HỆ THỐNG SẼ TỰ ĐỘNG XÁO TRỘN VÀ CHIA BÀI.
       ],
       recommendations: {
-        "tu_ghep": "Bé cần nhớ Từ ghép là 2 tiếng đứng riêng đều phải có ý nghĩa nhé.",
+        "tu_ghep": "Bé cần nhớ Từ ghép là sự kết hợp của các tiếng có nghĩa.",
         "tu_lay": "Bé hay nhầm Từ láy. Mẹo: Thử tách 2 từ ra xem có từ nào vô nghĩa không.",
-        "dong_nghia": "Bé cần trau dồi thêm vốn từ đồng nghĩa bằng cách đọc nhiều sách truyện hơn."
+        "dong_nghia": "Cần trau dồi thêm vốn từ đồng nghĩa.",
+        "cd_giadinh": "Bé chưa thuộc nhiều Ca dao gia đình. Ba mẹ nên đọc cho bé nghe thêm.",
+        "danh_tu": "Bé đang nhầm lẫn Từ loại. Danh từ là những từ chỉ người, vật, hiện tượng."
       }
     };
 
-    // 2. Audio Engine
+    // --- AUDIO SYSTEM ---
     const AudioEngine = {
       ctx: new (window.AudioContext || window.webkitAudioContext)(),
       playTone(freq, type, duration) {
@@ -217,53 +244,37 @@
       playWrong() { this.playTone(300, 'sawtooth', 0.3); }
     };
 
-    // 3. Main App Logic
+    // --- MAIN APP LOGIC ---
     const app = {
-      db: null,
+      db: internalDB,
       stats: { score: 0, completedLessons: {}, errorLog: {} },
       
       currentCatId: null,
       currentSubConfig: null,
-      currentLessonNumber: 1,
+      currentLessonKey: null,
       currentQuestions: [],
       currentIndex: 0,
       
-      async init() {
-        // Cố gắng tải file dữ liệu ngoài, nếu lỗi thì xài dữ liệu nội bộ
-        try {
-          const res = await fetch('./database.json');
-          const data = await res.json();
-          this.db = data.categories ? data : fallbackDB;
-        } catch (e) {
-          console.warn("Dùng dữ liệu dự phòng vì không tìm thấy database.json");
-          this.db = fallbackDB;
-        }
-
-        const savedStats = localStorage.getItem('tv_stats_v2');
+      init() {
+        const savedStats = localStorage.getItem('tv_stats_v3');
         if(savedStats) {
           this.stats = JSON.parse(savedStats);
           this.showDashboard();
         } else {
           document.getElementById('view-welcome').classList.remove('hidden-view');
         }
-
         window.addEventListener('touchstart', () => { if (AudioEngine.ctx.state === 'suspended') AudioEngine.ctx.resume(); }, { once: true });
       },
 
       saveStats() {
-        localStorage.setItem('tv_stats_v2', JSON.stringify(this.stats));
+        localStorage.setItem('tv_stats_v3', JSON.stringify(this.stats));
         document.getElementById('global-score').innerText = this.stats.score;
       },
 
-      // --- ĐIỀU HƯỚNG GIAO DIỆN ---
       hideAll() {
         ['view-welcome', 'view-dashboard', 'view-subcategories', 'view-game', 'view-result', 'modal-eval'].forEach(id => {
           document.getElementById(id).classList.add('hidden-view');
         });
-      },
-
-      enterDashboard() {
-        this.showDashboard();
       },
 
       showDashboard() {
@@ -273,19 +284,18 @@
         this.renderCategories();
       },
 
-      // Render danh sách Danh mục chính
       renderCategories() {
         const list = document.getElementById('category-list');
         list.innerHTML = '';
         this.db.categories.forEach(cat => {
           list.innerHTML += `
-            <div onclick="app.openCategory('${cat.id}')" class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-100 flex items-center gap-4 active:scale-95 transition-transform cursor-pointer">
-              <div class="w-16 h-16 rounded-2xl bg-gradient-to-br ${cat.color} flex items-center justify-center text-3xl shadow-inner text-white">
+            <div onclick="app.openCategory('${cat.id}')" class="bg-white rounded-3xl p-5 shadow-sm border border-slate-100 flex items-center gap-4 active:scale-95 transition-transform cursor-pointer">
+              <div class="w-[72px] h-[72px] rounded-2xl bg-gradient-to-br ${cat.color} flex items-center justify-center text-4xl shadow-inner text-white flex-shrink-0">
                 ${cat.icon}
               </div>
               <div class="flex-grow">
-                <h3 class="text-xl font-extrabold text-slate-700">${cat.name}</h3>
-                <p class="text-xs font-bold text-slate-400 mt-1">${cat.subcategories.length} Chủ đề ôn luyện</p>
+                <h3 class="text-lg font-extrabold text-slate-700 leading-tight">${cat.name}</h3>
+                <p class="text-[12px] font-bold text-slate-400 mt-1">${cat.subcategories.length} Chủ đề ôn luyện</p>
               </div>
               <div class="text-slate-300 font-bold text-2xl">➔</div>
             </div>
@@ -303,22 +313,21 @@
         
         cat.subcategories.forEach(sub => {
           let lessonButtonsHtml = '';
-          // Khởi tạo nút cho 15 bài học (hoặc tùy cấu hình)
           for(let i = 1; i <= sub.lessons; i++) {
             const lessonKey = `${sub.id}_bai${i}`;
             const isDone = this.stats.completedLessons[lessonKey];
             lessonButtonsHtml += `
-              <button onclick="app.startLesson('${sub.id}', ${i})" class="lesson-btn flex flex-col items-center justify-center w-[70px] h-[70px] rounded-2xl border-2 ${isDone ? 'bg-emerald-50 border-emerald-400 text-emerald-600' : 'bg-white border-slate-200 text-slate-500 hover:border-amber-300 hover:bg-amber-50'} flex-shrink-0 shadow-sm relative">
-                <span class="font-bold text-xs uppercase mb-1">Bài</span>
-                <span class="font-extrabold text-xl leading-none">${i}</span>
-                ${isDone ? '<span class="absolute -top-2 -right-2 text-sm">⭐</span>' : ''}
+              <button onclick="app.startLesson('${sub.id}', ${i})" class="lesson-btn flex flex-col items-center justify-center w-[75px] h-[75px] rounded-2xl border-b-4 ${isDone ? 'bg-emerald-50 border-emerald-400 text-emerald-600' : 'bg-white border-slate-200 text-slate-500 hover:border-sky-300'} flex-shrink-0 shadow-sm relative">
+                <span class="font-bold text-[10px] uppercase mb-0.5">Bài</span>
+                <span class="font-extrabold text-2xl leading-none">${i}</span>
+                ${isDone ? '<span class="absolute -top-2 -right-2 text-sm drop-shadow">⭐</span>' : ''}
               </button>
             `;
           }
 
           list.innerHTML += `
-            <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100">
-              <h4 class="font-extrabold text-slate-700 mb-3 text-lg border-l-4 border-amber-400 pl-3">${sub.name}</h4>
+            <div class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-100">
+              <h4 class="font-extrabold text-slate-700 mb-4 text-[15px] border-l-4 border-amber-400 pl-3 leading-tight">${sub.name}</h4>
               <div class="flex gap-3 overflow-x-auto pb-2 pr-4 snap-x">
                 ${lessonButtonsHtml}
               </div>
@@ -331,39 +340,31 @@
       },
 
       backToSubcategories() {
-        this.hideAll();
-        document.getElementById('view-subcategories').classList.remove('hidden-view');
-        // Re-render để hiện sao nếu vừa chơi xong
         this.openCategory(this.currentCatId); 
       },
 
-      // --- LOGIC TRÒ CHƠI & XÁO TRỘN DỮ LIỆU ---
       startLesson(subId, lessonNumber) {
-        // Tìm thông tin chủ đề
         let subConfig = null;
         this.db.categories.forEach(cat => {
           const found = cat.subcategories.find(s => s.id === subId);
           if(found) subConfig = found;
         });
 
-        // 1. Quét kho dữ liệu lấy các câu hỏi thuộc skill này
+        // 1. Quét kho dữ liệu lấy câu hỏi của kỹ năng này
         const questionPool = this.db.questions.filter(q => q.skill === subConfig.skill);
         
-        // CƠ CHẾ BỌC LỖI: Nếu dữ liệu trống
+        // Cơ chế bọc lỗi khi chưa làm kịp database
         if(questionPool.length === 0) {
-          alert("Kho dữ liệu đang cập nhật bài tập cho chủ đề này. Bé chọn bài khác nhé!");
+          alert(`Chủ đề này chưa có dữ liệu câu hỏi trong kho. Ba mẹ vui lòng bổ sung vào mục "${subConfig.skill}" nhé!`);
           return;
         }
 
-        // 2. THUẬT TOÁN XÁO TRỘN NGẪU NHIÊN (Shuffle Array)
+        // 2. Thuật toán Xáo trộn ngẫu nhiên (Luôn ra đề khác nhau)
         const shuffledPool = [...questionPool].sort(() => Math.random() - 0.5);
-        
-        // Lấy tối đa 10 câu (Nếu kho có ít hơn thì lấy tất cả)
         this.currentQuestions = shuffledPool.slice(0, 10);
         
-        // Thiết lập biến
         this.currentSubConfig = subConfig;
-        this.currentLessonNumber = lessonNumber;
+        this.currentLessonKey = `${subConfig.id}_bai${lessonNumber}`;
         this.currentIndex = 0;
 
         document.getElementById('game-prompt').innerText = subConfig.prompt || 'Chọn đáp án đúng';
@@ -377,9 +378,38 @@
         const item = this.currentQuestions[this.currentIndex];
         document.getElementById('current-word').innerText = item.word;
         
-        document.getElementById('btn-left-text').innerText = item.btnLeft || this.currentSubConfig.btnLeft || 'TRÁI';
-        document.getElementById('btn-right-text').innerText = item.btnRight || this.currentSubConfig.btnRight || 'PHẢI';
+        // --- XÂY DỰNG LƯỚI NÚT ĐÁP ÁN ĐỘNG ---
+        const grid = document.getElementById('answers-grid');
+        grid.innerHTML = '';
+        
+        if (item.type === 'mcq' && item.options.length > 2) {
+          // Trắc nghiệm 3 hoặc 4 đáp án (Xếp 1 cột dọc)
+          grid.className = "w-full grid grid-cols-1 gap-3 pb-6 px-2";
+          item.options.forEach((opt, idx) => {
+            grid.innerHTML += `
+              <button onclick="app.checkAnswer('${idx}')" class="answer-btn w-full text-left px-5 py-4 bg-white border-slate-200 border rounded-2xl border-b-4 border-slate-300 shadow-sm flex items-center gap-3">
+                <span class="w-8 h-8 rounded-full bg-sky-100 text-sky-600 font-extrabold flex items-center justify-center flex-shrink-0">${String.fromCharCode(65 + idx)}</span>
+                <span class="font-bold text-slate-700 text-sm">${opt}</span>
+              </button>
+            `;
+          });
+        } else {
+          // Trắc nghiệm 2 đáp án Trái / Phải (Xếp 2 cột ngang)
+          grid.className = "w-full grid grid-cols-2 gap-4 pb-6";
+          const opt1 = item.options ? item.options[0] : (item.btnLeft || this.currentSubConfig.btnLeft || 'TRÁI');
+          const opt2 = item.options ? item.options[1] : (item.btnRight || this.currentSubConfig.btnRight || 'PHẢI');
+          
+          grid.innerHTML = `
+            <button onclick="app.checkAnswer('0')" class="answer-btn h-24 bg-emerald-50 border-emerald-200 border rounded-2xl border-b-4 border-emerald-400 flex items-center justify-center shadow-sm">
+              <span class="font-bold text-emerald-800 text-sm px-2 text-center">${opt1}</span>
+            </button>
+            <button onclick="app.checkAnswer('1')" class="answer-btn h-24 bg-amber-50 border-amber-200 border rounded-2xl border-b-4 border-amber-400 flex items-center justify-center shadow-sm">
+              <span class="font-bold text-amber-800 text-sm px-2 text-center">${opt2}</span>
+            </button>
+          `;
+        }
 
+        // Cập nhật tiến trình
         const percent = ((this.currentIndex) / this.currentQuestions.length) * 100;
         document.getElementById('progress-bar').style.width = percent + '%';
         document.getElementById('progress-text').innerText = `${this.currentIndex + 1}/${this.currentQuestions.length}`;
@@ -394,8 +424,10 @@
 
       checkAnswer(userChoice) {
         const item = this.currentQuestions[this.currentIndex];
+        // So sánh chuỗi (vì có thể lưu '0', '1' hoặc 'left', 'right' ở dữ liệu cũ)
+        const isCorrect = (userChoice === item.correct || (userChoice==='0' && item.correct==='left') || (userChoice==='1' && item.correct==='right'));
         
-        if (userChoice === item.correct) {
+        if (isCorrect) {
           AudioEngine.playCorrect();
           this.currentIndex++;
           
@@ -403,19 +435,17 @@
             this.updateGameUI();
           } else {
             // Lưu trạng thái hoàn thành Bài
-            const lessonKey = `${this.currentSubConfig.id}_bai${this.currentLessonNumber}`;
-            // Chỉ cộng điểm nếu là lần đầu hoàn thành bài này
-            if(!this.stats.completedLessons[lessonKey]) {
+            if(!this.stats.completedLessons[this.currentLessonKey]) {
                this.stats.score += 50;
             }
-            this.stats.completedLessons[lessonKey] = true;
+            this.stats.completedLessons[this.currentLessonKey] = true;
             this.saveStats();
             
             // Hiện kết quả
             const list = document.getElementById('summary-list');
             list.innerHTML = '';
             this.currentQuestions.forEach(q => {
-              list.innerHTML += `<li class="mb-2"><b>- ${q.word}</b>: ${q.desc}</li>`;
+              list.innerHTML += `<li class="mb-3 border-b border-dashed border-amber-200 pb-2"><b class="text-amber-700">${q.word}</b><br><span class="text-[12px]">${q.desc}</span></li>`;
             });
             
             this.hideAll();
@@ -425,7 +455,7 @@
         } else {
           AudioEngine.playWrong();
           
-          // Ghi nhận lỗi cho AI Đánh giá
+          // Ghi nhận lỗi cho Sổ Liên Lạc
           const skill = this.currentSubConfig.skill;
           if(!this.stats.errorLog[skill]) this.stats.errorLog[skill] = 0;
           this.stats.errorLog[skill]++;
@@ -448,23 +478,22 @@
         }
       },
 
-      // --- HỆ THỐNG ĐÁNH GIÁ (AI HỒ SƠ BE) ---
       showEvaluation() {
         const evalBox = document.getElementById('eval-content');
         evalBox.innerHTML = '';
-        
         let hasErrors = false;
         
         for (let skill in this.stats.errorLog) {
           const errCount = this.stats.errorLog[skill];
-          if (errCount > 2) {
+          if (errCount >= 2) {
             hasErrors = true;
             const recText = this.db.recommendations[skill] || "Bé cần luyện tập thêm phần này nhé.";
             evalBox.innerHTML += `
-              <div class="bg-white p-3 rounded-lg border-l-4 border-orange-400 shadow-sm">
-                <span class="font-bold text-orange-600">⚠️ Chủ đề cần ôn lại</span>
-                <p class="mt-1">${recText}</p>
-                <p class="text-xs text-slate-400 mt-1 font-bold">Số lần làm sai: ${errCount}</p>
+              <div class="bg-white p-4 rounded-2xl border border-orange-200 shadow-sm relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-1 h-full bg-orange-400"></div>
+                <span class="font-extrabold text-orange-600 text-sm">Chủ đề cần chú ý: ${skill.toUpperCase()}</span>
+                <p class="mt-2 text-slate-600 leading-snug">${recText}</p>
+                <p class="text-[10px] bg-orange-100 text-orange-800 font-bold px-2 py-1 rounded-full inline-block mt-2">Sai ${errCount} lần</p>
               </div>
             `;
           }
@@ -472,9 +501,10 @@
 
         if(!hasErrors) {
           evalBox.innerHTML = `
-            <div class="flex flex-col items-center justify-center h-full text-center">
-              <span class="text-4xl mb-2">🌟</span>
-              <p class="font-bold text-emerald-600 mt-2">Tuyệt vời! Hệ thống chưa phát hiện lỗ hổng kiến thức nào của bé. Tiếp tục học nhé!</p>
+            <div class="flex flex-col items-center justify-center h-full text-center p-6">
+              <span class="text-6xl mb-4">🌟</span>
+              <p class="font-extrabold text-emerald-600 text-lg">Hoàn hảo!</p>
+              <p class="text-slate-500 mt-2 text-sm font-bold">Hệ thống chưa phát hiện điểm yếu nào. Bé hãy làm thêm các bài tập để nhận phân tích nhé!</p>
             </div>
           `;
         }
