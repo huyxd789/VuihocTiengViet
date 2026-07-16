@@ -18,7 +18,6 @@
     .animate-shake { animation: shake 0.3s ease-in-out; }
     .active-node { box-shadow: 0 0 0 0 rgba(245,158,11,0.7); animation: pulse-ring 1.5s infinite; }
     @keyframes pulse-ring { 100% { box-shadow: 0 0 0 15px rgba(245,158,11,0); } }
-    /* Nền welcome cực kỳ sinh động */
     .welcome-bg { background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 100%); position: relative; overflow: hidden; }
     .cloud { position: absolute; background: white; border-radius: 50px; opacity: 0.8; }
   </style>
@@ -26,25 +25,23 @@
 <body class="bg-gradient-to-b from-[#e0f2fe] to-[#fef3c7] h-screen w-screen overflow-hidden flex flex-col items-center relative text-slate-800">
 
   <!-- ========================================== -->
-  <!-- 1. MÀN HÌNH CHÀO (WELCOME SCREEN)          -->
+  <!-- 1. MÀN HÌNH CHÀO                           -->
   <!-- ========================================== -->
   <div id="view-welcome" class="welcome-bg w-full h-full max-w-md flex flex-col items-center justify-center relative animate-pop z-50">
     <div class="cloud w-32 h-10 top-10 left-[-20px] blur-[2px]"></div>
     <div class="cloud w-40 h-12 top-24 right-[-30px] blur-[1px]"></div>
     
-    <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center text-6xl shadow-2xl mb-6 z-10 border-4 border-amber-300">
-      🇻🇳
-    </div>
+    <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center text-6xl shadow-2xl mb-6 z-10 border-4 border-amber-300">🇻🇳</div>
     <h1 class="text-4xl font-extrabold text-white text-center drop-shadow-md mb-2 leading-tight">Vui Học<br>Tiếng Việt</h1>
     <p class="text-sky-100 font-bold text-lg mb-10 drop-shadow">Dành cho học sinh Tiểu học</p>
     
-    <button onclick="app.enterMap()" class="z-10 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-extrabold text-xl py-4 px-12 rounded-[2rem] shadow-xl active:scale-90 transition-transform border-b-4 border-orange-600 flex items-center gap-2">
+    <button onclick="app.enterMap()" class="z-10 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-extrabold text-xl py-4 px-12 rounded-[2rem] shadow-xl active:scale-90 transition-transform border-b-4 border-orange-600">
       Bắt Đầu 🚀
     </button>
   </div>
 
   <!-- ========================================== -->
-  <!-- 2. MÀN HÌNH BẢN ĐỒ (MAP SCREEN)            -->
+  <!-- 2. MÀN HÌNH BẢN ĐỒ                         -->
   <!-- ========================================== -->
   <div id="view-map" class="hidden-view w-full h-full max-w-md flex flex-col relative animate-pop">
     <header class="w-full p-4 z-10">
@@ -83,7 +80,7 @@
     </main>
   </div>
 
-  <!-- MODAL CHỌN BÀI HỌC CON (SUB-LEVELS) -->
+  <!-- MODAL CHỌN BÀI HỌC CON -->
   <div id="modal-sublevel" class="hidden-view fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-end justify-center">
     <div class="bg-white w-full max-w-md rounded-t-[2rem] p-6 shadow-2xl animate-pop pb-10">
       <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-2">
@@ -91,25 +88,18 @@
         <button onclick="document.getElementById('modal-sublevel').classList.add('hidden-view')" class="text-2xl text-slate-400 font-bold p-2 active:scale-90">✖</button>
       </div>
       <p class="text-sm font-bold text-slate-500 mb-4 bg-amber-50 p-2 rounded-lg border border-amber-100">📌 Hoàn thành ít nhất <span class="text-red-500">3/5 bài</span> để mở khóa bản đồ tiếp theo.</p>
-      
-      <div id="sublevel-list" class="flex flex-col gap-3 h-64 overflow-y-auto pr-2">
-        <!-- Render động bằng JS -->
-      </div>
+      <div id="sublevel-list" class="flex flex-col gap-3 h-64 overflow-y-auto pr-2"></div>
     </div>
   </div>
 
-  <!-- MODAL ĐÁNH GIÁ & KHUYẾN NGHỊ (HỒ SƠ BÉ) -->
+  <!-- MODAL ĐÁNH GIÁ (AI HỒ SƠ BE) -->
   <div id="modal-eval" class="hidden-view fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-md rounded-[2rem] p-6 shadow-2xl animate-pop">
       <div class="text-center mb-4">
         <div class="text-5xl mb-2">📊</div>
         <h3 class="text-xl font-bold text-sky-600">Báo Cáo Năng Lực</h3>
       </div>
-      
-      <div id="eval-content" class="bg-sky-50 rounded-xl p-4 text-sm text-slate-700 h-64 overflow-y-auto border border-sky-100 space-y-3">
-        <!-- Render động bằng JS dựa trên dữ liệu lỗi của bé -->
-      </div>
-
+      <div id="eval-content" class="bg-sky-50 rounded-xl p-4 text-sm text-slate-700 h-64 overflow-y-auto border border-sky-100 space-y-3"></div>
       <button onclick="document.getElementById('modal-eval').classList.add('hidden-view')" class="mt-4 w-full bg-sky-500 text-white font-bold py-3 rounded-2xl active:scale-95">Đóng Báo Cáo</button>
     </div>
   </div>
@@ -117,42 +107,52 @@
   <!-- ========================================== -->
   <!-- 3. MÀN HÌNH TRÒ CHƠI & KẾT QUẢ             -->
   <!-- ========================================== -->
-  <!-- (Kế thừa nguyên bản giao diện chơi của phiên bản trước) -->
   <div id="view-game" class="hidden-view w-full h-full max-w-md flex flex-col relative animate-pop bg-[#f0f9ff]">
     <div class="p-4 flex items-center justify-between">
       <button onclick="app.showMap()" class="w-10 h-10 bg-white rounded-full shadow flex items-center justify-center text-xl text-slate-600 active:scale-90">🔙</button>
       <div class="flex-grow mx-4 h-4 bg-slate-200 rounded-full overflow-hidden"><div id="progress-bar" class="h-full bg-emerald-400 w-0 transition-all"></div></div>
-      <div class="font-bold text-slate-600 text-sm" id="progress-text">0/5</div>
+      <div class="font-bold text-slate-600 text-sm" id="progress-text">0/10</div>
     </div>
+    
     <div class="flex-grow flex flex-col justify-center items-center p-6 w-full">
-      <p id="game-prompt" class="text-slate-500 font-bold mb-4 text-sm bg-white px-4 py-1 rounded-full">Câu hỏi?</p>
-      <div id="word-card" class="w-full max-w-[280px] aspect-square bg-white rounded-[2.5rem] shadow-2xl border-8 border-sky-300 flex flex-col items-center justify-center relative">
-        <h1 id="current-word" class="text-3xl font-extrabold text-center px-4">Từ Vựng</h1>
-        <button onclick="app.readWord()" class="absolute bottom-4 bg-sky-100 text-sky-600 px-4 py-2 rounded-full text-sm font-bold flex items-center gap-2">🔊 Đọc</button>
+      <p id="game-prompt" class="text-slate-500 font-bold mb-4 text-sm bg-white px-4 py-1 rounded-full shadow-sm text-center">Câu hỏi?</p>
+      <div id="word-card" class="w-full max-w-[280px] aspect-square bg-white rounded-[2.5rem] shadow-2xl border-8 border-sky-300 flex flex-col items-center justify-center relative transition-transform">
+        <h1 id="current-word" class="text-3xl font-extrabold text-slate-800 tracking-tight text-center px-4 leading-relaxed">Từ Vựng</h1>
+        <button onclick="app.readWord()" class="absolute bottom-4 bg-sky-100 text-sky-600 px-4 py-2 rounded-full text-sm font-bold active:bg-sky-200 flex items-center gap-2">
+          <span>🔊</span> Nghe đọc
+        </button>
       </div>
     </div>
+    
     <div class="w-full p-6 grid grid-cols-2 gap-4 pb-10">
-      <button onclick="app.checkAnswer('left')" class="h-24 bg-emerald-100 border-b-4 border-emerald-400 rounded-2xl flex flex-col items-center justify-center active:scale-95">
-        <span id="btn-left-text" class="font-bold text-emerald-800">TRÁI</span>
+      <button onclick="app.checkAnswer('left')" class="h-24 bg-gradient-to-b from-emerald-100 to-emerald-200 border-b-4 border-emerald-400 rounded-2xl flex flex-col items-center justify-center shadow-lg active:scale-95 active:border-b-0 active:translate-y-1 transition-all">
+        <span id="btn-left-text" class="font-bold text-emerald-800 px-2 text-center text-sm md:text-base">TRÁI</span>
       </button>
-      <button onclick="app.checkAnswer('right')" class="h-24 bg-amber-100 border-b-4 border-amber-400 rounded-2xl flex flex-col items-center justify-center active:scale-95">
-        <span id="btn-right-text" class="font-bold text-amber-800">PHẢI</span>
+      <button onclick="app.checkAnswer('right')" class="h-24 bg-gradient-to-b from-amber-100 to-amber-200 border-b-4 border-amber-400 rounded-2xl flex flex-col items-center justify-center shadow-lg active:scale-95 active:border-b-0 active:translate-y-1 transition-all">
+        <span id="btn-right-text" class="font-bold text-amber-800 px-2 text-center text-sm md:text-base">PHẢI</span>
       </button>
     </div>
   </div>
 
   <div id="view-result" class="hidden-view fixed inset-0 w-full h-full bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl flex flex-col items-center text-center">
+    <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl flex flex-col items-center text-center animate-pop">
       <div class="text-6xl mb-2">🎉</div>
       <h2 class="text-2xl font-extrabold text-amber-500 mb-2">Hoàn thành bài!</h2>
       <p class="text-slate-600 font-bold mb-4">Bé nhận được <span class="text-amber-500">+50 ⭐</span></p>
-      <button onclick="app.finishGame()" class="w-full bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold py-4 rounded-2xl active:scale-95 text-lg">Quay về Bản Đồ</button>
+      <button onclick="app.finishGame()" class="w-full bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold py-4 rounded-2xl active:scale-95 text-lg shadow-lg">Quay về Bản Đồ</button>
     </div>
   </div>
 
-  <!-- LOGIC HỆ THỐNG -->
+  <!-- ========================================== -->
+  <!-- KỊCH BẢN LOGIC ĐÃ FIX BUG                  -->
+  <!-- ========================================== -->
   <script>
-    // Audio giả lập không cần file
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW fail', err));
+      });
+    }
+
     const AudioEngine = {
       ctx: new (window.AudioContext || window.webkitAudioContext)(),
       playTone(freq, type, duration) {
@@ -177,7 +177,6 @@
       currentIndex: 0,
       
       async init() {
-        // 1. Lấy dữ liệu từ file JSON bên ngoài
         try {
           const res = await fetch('./database.json');
           this.db = await res.json();
@@ -185,13 +184,14 @@
           alert("Lỗi tải dữ liệu. Vui lòng kiểm tra file database.json!"); return;
         }
 
-        // 2. Phục hồi dữ liệu từ điện thoại
         const savedStats = localStorage.getItem('tv_stats');
         if(savedStats) {
           this.stats = JSON.parse(savedStats);
+          document.getElementById('view-welcome').classList.add('hidden-view');
+          document.getElementById('view-map').classList.remove('hidden-view');
         } else {
-          // Lần đầu mở app
           document.getElementById('view-welcome').classList.remove('hidden-view');
+          document.getElementById('view-map').classList.add('hidden-view');
         }
 
         this.updateMapUI();
@@ -205,7 +205,7 @@
 
       enterMap() {
         document.getElementById('view-welcome').classList.add('hidden-view');
-        this.showMap();
+        document.getElementById('view-map').classList.remove('hidden-view');
       },
 
       showMap() {
@@ -214,39 +214,33 @@
         document.getElementById('view-map').classList.remove('hidden-view');
       },
 
-      // TÍNH TOÁN LOGIC CHUYỂN BƯỚC (Hoàn thành >= 3 bài)
       updateMapUI() {
         document.getElementById('global-score').innerText = this.stats.score;
         
-        // Duyệt qua tất cả các level trong CSDL để vẽ bản đồ
         for (let lvlId in this.db.levels) {
           const levelData = this.db.levels[lvlId];
           const gamesInLevel = levelData.games;
           
-          // Đếm số bài đã pass trong level này
           let passedCount = 0;
           gamesInLevel.forEach(g => { if(this.stats.completedGames[g.id]) passedCount++; });
           
           const progressEl = document.getElementById(`node-progress-${lvlId}`);
           if(progressEl) progressEl.innerText = `${passedCount}/${gamesInLevel.length} bài`;
 
-          // Cập nhật giao diện mở khóa
           const node = document.getElementById(`node-level-${lvlId}`);
           const btn = document.getElementById(`node-btn-${lvlId}`);
           const lock = document.getElementById(`node-lock-${lvlId}`);
           const label = document.getElementById(`node-label-${lvlId}`);
           
           if (parseInt(lvlId) <= this.stats.unlockedLevel) {
-            // Level đã mở khóa
             if(node) node.classList.remove('opacity-60');
             if(lock) lock.classList.add('hidden');
             if(btn) btn.classList.remove('hidden');
             if(label) label.className = "mt-2 bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-full";
             
-            // Nếu đã pass đủ 3 bài -> Mở khóa level tiếp theo
             if (passedCount >= 3 && this.stats.unlockedLevel == lvlId) {
               this.stats.unlockedLevel = parseInt(lvlId) + 1;
-              this.saveStats(); // Lưu và đệ quy cập nhật lại map
+              this.saveStats();
             }
           }
         }
@@ -264,10 +258,9 @@
         levelData.games.forEach(game => {
           const isDone = this.stats.completedGames[game.id];
           const btnHtml = `
-            <button onclick="app.startGame('${game.id}', '${levelData.name}')" class="w-full flex items-center justify-between p-3 rounded-xl border-2 ${isDone ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-200 hover:border-amber-300'} active:scale-95 transition-all text-left">
+            <button onclick="app.startGame('${game.id}')" class="w-full flex items-center justify-between p-3 rounded-xl border-2 ${isDone ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-200 hover:border-amber-300'} active:scale-95 transition-all text-left">
               <div>
                 <div class="font-bold ${isDone ? 'text-emerald-700' : 'text-slate-700'}">${game.title}</div>
-                <div class="text-xs text-slate-400">10 câu hỏi</div>
               </div>
               <div class="text-2xl">${isDone ? '✅' : '▶️'}</div>
             </button>
@@ -278,24 +271,36 @@
         document.getElementById('modal-sublevel').classList.remove('hidden-view');
       },
 
-      startGame(gameId, levelName) {
+      // FIX BUG: XỬ LÝ LỖI NULL DATA VÀ ĐIỀU HƯỚNG GIAO DIỆN
+      startGame(gameId) {
+        // 1. Tắt Modal trước
         document.getElementById('modal-sublevel').classList.add('hidden-view');
-        this.viewMap.classList.add('hidden-view');
-        document.getElementById('view-game').classList.remove('hidden-view');
         
+        // 2. Trích xuất dữ liệu câu hỏi từ CSDL
         this.currentGameId = gameId;
-        // Lọc câu hỏi từ DB thuộc về game này (Lấy tối đa 10 câu)
-        this.currentQuestions = this.db.questions.filter(q => q.game_id === gameId).slice(0,10);
+        this.currentQuestions = this.db.questions.filter(q => q.game_id === gameId).slice(0, 10);
         
-        // Tìm thông tin game để lấy skill name (phục vụ đánh giá)
-        let gameConfig;
+        // CƠ CHẾ FAIL-SAFE: Nếu JSON chưa có câu hỏi nào cho Game ID này
+        if (this.currentQuestions.length === 0) {
+            alert("Nội dung bài học này đang được cập nhật thêm dữ liệu. Bạn hãy chọn bài khác nhé!");
+            return; // Dừng chạy, giữ nguyên màn hình bản đồ
+        }
+        
+        // 3. Tìm config của game để lấy nút bấm
+        let gameConfig = null;
         Object.values(this.db.levels).forEach(lvl => {
           const found = lvl.games.find(g => g.id === gameId);
           if(found) gameConfig = found;
         });
         
+        if (!gameConfig) return;
+
         this.currentSkill = gameConfig.skill;
         document.getElementById('game-prompt').innerText = gameConfig.type === 'classification' ? 'Phân loại từ' : 'Điền vào chỗ trống';
+        
+        // 4. Chuyển đổi màn hình một cách an toàn (Sử dụng DOM Element chuẩn)
+        document.getElementById('view-map').classList.add('hidden-view');
+        document.getElementById('view-game').classList.remove('hidden-view');
         
         this.currentIndex = 0;
         this.updateGameUI(gameConfig);
@@ -305,7 +310,6 @@
         const item = this.currentQuestions[this.currentIndex];
         document.getElementById('current-word').innerText = item.word;
         
-        // Đổi nhãn nút động
         document.getElementById('btn-left-text').innerText = item.btnLeft || gameConfig.btnLeft || 'TRÁI';
         document.getElementById('btn-right-text').innerText = item.btnRight || gameConfig.btnRight || 'PHẢI';
 
@@ -327,8 +331,8 @@
         if (userChoice === item.correct) {
           AudioEngine.playCorrect();
           this.currentIndex++;
+          
           if (this.currentIndex < this.currentQuestions.length) {
-            // Lấy lại config để render nút
             let gameConfig;
             Object.values(this.db.levels).forEach(lvl => {
               const found = lvl.games.find(g => g.id === this.currentGameId);
@@ -336,7 +340,6 @@
             });
             this.updateGameUI(gameConfig);
           } else {
-            // Hoàn thành bài
             this.stats.completedGames[this.currentGameId] = true;
             this.stats.score += 50;
             this.saveStats();
@@ -346,7 +349,6 @@
             AudioEngine.playCorrect();
           }
         } else {
-          // SAI -> Ghi log lỗi để đánh giá AI
           AudioEngine.playWrong();
           
           if(!this.stats.errorLog[this.currentSkill]) this.stats.errorLog[this.currentSkill] = 0;
@@ -374,24 +376,22 @@
         this.showMap();
       },
 
-      // HỆ THỐNG PHÂN TÍCH ĐÁNH GIÁ (AI-BASED RECOMMENDATION)
       showEvaluation() {
         const evalBox = document.getElementById('eval-content');
         evalBox.innerHTML = '';
         
         let hasErrors = false;
         
-        // Duyệt qua log lỗi lưu trong máy
         for (let skill in this.stats.errorLog) {
           const errCount = this.stats.errorLog[skill];
-          if (errCount > 2) { // Ngưỡng: Sai quá 2 lần trong một chủ đề sẽ bị nhắc nhở
+          if (errCount > 2) {
             hasErrors = true;
             const recText = this.db.recommendations[skill] || "Bé cần luyện tập thêm phần này nhé.";
             evalBox.innerHTML += `
               <div class="bg-white p-3 rounded-lg border-l-4 border-orange-400 shadow-sm">
                 <span class="font-bold text-orange-600">⚠️ Chủ đề: ${skill.toUpperCase()}</span>
                 <p class="mt-1">${recText}</p>
-                <p class="text-xs text-slate-400 mt-1">Số lần trả lời sai: ${errCount}</p>
+                <p class="text-xs text-slate-400 mt-1 font-bold">Số lần trả lời sai: ${errCount}</p>
               </div>
             `;
           }
@@ -401,7 +401,7 @@
           evalBox.innerHTML = `
             <div class="flex flex-col items-center justify-center h-full text-center">
               <span class="text-4xl mb-2">🌟</span>
-              <p class="font-bold text-emerald-600">Tuyệt vời! Bé chưa có điểm yếu nào đáng lo ngại. Hãy tiếp tục phát huy nhé!</p>
+              <p class="font-bold text-emerald-600 mt-2">Tuyệt vời! Bé chưa có điểm yếu nào đáng lo ngại. Hãy tiếp tục phát huy nhé!</p>
             </div>
           `;
         }
@@ -410,7 +410,7 @@
       }
     };
 
-    // Khởi động
+    // Khởi chạy ứng dụng
     app.init();
   </script>
 </body>
