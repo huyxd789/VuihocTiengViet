@@ -16,101 +16,95 @@
     .animate-pop { animation: pop 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
     @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-8px); } 75% { transform: translateX(8px); } }
     .animate-shake { animation: shake 0.3s ease-in-out; }
-    .active-node { box-shadow: 0 0 0 0 rgba(245,158,11,0.7); animation: pulse-ring 1.5s infinite; }
-    @keyframes pulse-ring { 100% { box-shadow: 0 0 0 15px rgba(245,158,11,0); } }
+    /* Nền welcome */
     .welcome-bg { background: linear-gradient(135deg, #7dd3fc 0%, #38bdf8 100%); position: relative; overflow: hidden; }
     .cloud { position: absolute; background: white; border-radius: 50px; opacity: 0.8; }
+    /* Nút bài học */
+    .lesson-btn { transition: all 0.2s; }
+    .lesson-btn:active { transform: scale(0.95); }
   </style>
 </head>
-<body class="bg-gradient-to-b from-[#e0f2fe] to-[#fef3c7] h-screen w-screen overflow-hidden flex flex-col items-center relative text-slate-800">
+<body class="bg-gradient-to-b from-[#f0f9ff] to-[#e0f2fe] h-screen w-screen overflow-hidden flex flex-col items-center relative text-slate-800">
 
   <!-- ========================================== -->
-  <!-- 1. MÀN HÌNH CHÀO                           -->
+  <!-- 1. MÀN HÌNH CHÀO (WELCOME)                 -->
   <!-- ========================================== -->
   <div id="view-welcome" class="welcome-bg w-full h-full max-w-md flex flex-col items-center justify-center relative animate-pop z-50">
     <div class="cloud w-32 h-10 top-10 left-[-20px] blur-[2px]"></div>
     <div class="cloud w-40 h-12 top-24 right-[-30px] blur-[1px]"></div>
+    <div class="cloud w-24 h-8 bottom-32 left-10 blur-[1px]"></div>
     
-    <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center text-6xl shadow-2xl mb-6 z-10 border-4 border-amber-300">🇻🇳</div>
+    <div class="w-32 h-32 bg-white rounded-full flex items-center justify-center text-6xl shadow-2xl mb-6 z-10 border-4 border-amber-300">📚</div>
     <h1 class="text-4xl font-extrabold text-white text-center drop-shadow-md mb-2 leading-tight">Vui Học<br>Tiếng Việt</h1>
-    <p class="text-sky-100 font-bold text-lg mb-10 drop-shadow">Dành cho học sinh Tiểu học</p>
+    <p class="text-sky-100 font-bold text-lg mb-10 drop-shadow">Chương trình Tiểu học</p>
     
-    <button onclick="app.enterMap()" class="z-10 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-extrabold text-xl py-4 px-12 rounded-[2rem] shadow-xl active:scale-90 transition-transform border-b-4 border-orange-600">
-      Bắt Đầu 🚀
+    <button onclick="app.enterDashboard()" class="z-10 bg-gradient-to-r from-amber-400 to-orange-500 text-white font-extrabold text-xl py-4 px-12 rounded-[2rem] shadow-xl active:scale-90 transition-transform border-b-4 border-orange-600 flex items-center gap-2">
+      Bắt Đầu Học 🚀
     </button>
   </div>
 
   <!-- ========================================== -->
-  <!-- 2. MÀN HÌNH BẢN ĐỒ                         -->
+  <!-- 2. MÀN HÌNH CHÍNH (DASHBOARD CATEGORIES)  -->
   <!-- ========================================== -->
-  <div id="view-map" class="hidden-view w-full h-full max-w-md flex flex-col relative animate-pop">
-    <header class="w-full p-4 z-10">
-      <div class="bg-white/90 backdrop-blur-md rounded-2xl p-3 flex justify-between items-center shadow-md border-b-4 border-amber-200">
-        <div class="flex items-center gap-3">
-          <button onclick="app.showEvaluation()" class="w-12 h-12 rounded-full bg-amber-100 border-2 border-amber-400 flex items-center justify-center text-2xl shadow-inner active:scale-95">👦🏻</button>
-          <div>
-            <h2 class="text-[10px] text-amber-700 font-bold uppercase">Sĩ tử tí hon</h2>
-            <p class="text-sm font-bold">Bé ngoan</p>
-          </div>
+  <div id="view-dashboard" class="hidden-view w-full h-full max-w-md flex flex-col animate-pop bg-[#f8fafc]">
+    
+    <!-- Header -->
+    <header class="bg-white px-5 pt-6 pb-4 shadow-sm rounded-b-3xl flex justify-between items-center z-10">
+      <div class="flex items-center gap-3">
+        <div class="w-12 h-12 bg-sky-100 rounded-full flex items-center justify-center text-2xl border-2 border-sky-300">👦🏻</div>
+        <div>
+          <h2 class="text-sm font-bold text-slate-700">Chào Sĩ tử nhí,</h2>
+          <p class="text-[11px] text-slate-400 font-bold">Hôm nay học gì nào?</p>
         </div>
-        <div class="bg-amber-100 border border-amber-300 rounded-full py-1 px-3 flex items-center gap-1">
-          <span class="text-base">⭐</span><span class="text-sm font-bold text-amber-800" id="global-score">0</span>
-        </div>
+      </div>
+      <div class="bg-amber-100 border border-amber-300 rounded-full py-1.5 px-3 flex items-center gap-1 shadow-sm">
+        <span>⭐</span><span class="text-sm font-bold text-amber-800" id="global-score">0</span>
       </div>
     </header>
 
-    <main class="flex-grow w-full relative flex flex-col items-center justify-center -mt-10">
-      <svg class="absolute inset-0 w-full h-full pointer-events-none stroke-amber-400/50 stroke-[6] stroke-dasharray-[10,15]" fill="none" style="stroke-linecap: round;"><path d="M 200,100 Q 300,250 200,400 T 200,600" /></svg>
-      <div class="relative w-full flex flex-col gap-20 items-center">
-        <!-- Node Level 2 -->
-        <div id="node-level-2" class="flex flex-col items-center translate-x-12 opacity-60 transition-all duration-500">
-          <div id="node-lock-2" class="w-16 h-16 rounded-full bg-slate-300 border-4 border-slate-400 flex items-center justify-center text-2xl">🔒</div>
-          <button id="node-btn-2" onclick="app.openSubLevelModal(2)" class="hidden w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-4 border-white flex items-center justify-center text-3xl shadow-xl active:scale-95">🏰</button>
-          <div id="node-label-2" class="mt-2 bg-slate-400 text-white text-xs font-bold px-3 py-1 rounded-full shadow">Đỉnh Ca Dao</div>
-          <div id="node-progress-2" class="text-[10px] font-bold text-slate-500 mt-1">0/5 bài</div>
-        </div>
+    <!-- Danh sách Danh mục chính -->
+    <main class="flex-grow overflow-y-auto p-5 pb-24">
+      <h3 class="text-lg font-extrabold text-slate-700 mb-4">Các Nội Dung Chính</h3>
+      <div id="category-list" class="grid grid-cols-1 gap-4">
+        <!-- Render bằng JS -->
+      </div>
+    </main>
 
-        <!-- Node Level 1 -->
-        <div id="node-level-1" class="flex flex-col items-center -translate-x-10 relative transition-all duration-500">
-          <button id="node-btn-1" onclick="app.openSubLevelModal(1)" class="w-20 h-20 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 border-4 border-white flex items-center justify-center text-3xl shadow-xl active:scale-95 active-node">📚</button>
-          <div id="node-label-1" class="mt-2 bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-full shadow">Luyện Từ Vựng</div>
-          <div id="node-progress-1" class="text-[10px] font-bold text-orange-600 mt-1 bg-white/70 px-2 rounded-full">0/5 bài</div>
-        </div>
+    <!-- Bottom Navigation Bar -->
+    <nav class="absolute bottom-0 w-full max-w-md bg-white border-t border-slate-200 px-6 py-3 flex justify-between items-center pb-safe">
+      <button onclick="app.showDashboard()" class="flex flex-col items-center text-sky-500">
+        <span class="text-2xl">🏠</span><span class="text-[10px] font-bold mt-1">Trang chủ</span>
+      </button>
+      <button onclick="app.showEvaluation()" class="flex flex-col items-center text-slate-400 hover:text-sky-500 transition-colors">
+        <span class="text-2xl">📊</span><span class="text-[10px] font-bold mt-1">Đánh giá</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- 3. MÀN HÌNH DANH SÁCH CHỦ ĐỀ & BÀI HỌC     -->
+  <!-- ========================================== -->
+  <div id="view-subcategories" class="hidden-view w-full h-full max-w-md flex flex-col animate-pop bg-[#f0f9ff]">
+    <header class="bg-white px-4 py-4 shadow-sm flex items-center gap-3 z-10">
+      <button onclick="app.showDashboard()" class="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-xl active:bg-slate-200">🔙</button>
+      <h2 class="text-lg font-extrabold text-slate-700" id="sub-cat-title">Tên Danh Mục</h2>
+    </header>
+    <main class="flex-grow overflow-y-auto p-4">
+      <div id="subcategory-list" class="flex flex-col gap-6 pb-10">
+        <!-- Render chủ đề và 15 bài học bằng JS -->
       </div>
     </main>
   </div>
 
-  <!-- MODAL CHỌN BÀI HỌC CON -->
-  <div id="modal-sublevel" class="hidden-view fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-end justify-center">
-    <div class="bg-white w-full max-w-md rounded-t-[2rem] p-6 shadow-2xl animate-pop pb-10">
-      <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-2">
-        <h3 class="text-xl font-bold text-amber-600" id="sublevel-title">Danh sách Bài học</h3>
-        <button onclick="document.getElementById('modal-sublevel').classList.add('hidden-view')" class="text-2xl text-slate-400 font-bold p-2 active:scale-90">✖</button>
-      </div>
-      <p class="text-sm font-bold text-slate-500 mb-4 bg-amber-50 p-2 rounded-lg border border-amber-100">📌 Hoàn thành ít nhất <span class="text-red-500">3/5 bài</span> để mở khóa bản đồ tiếp theo.</p>
-      <div id="sublevel-list" class="flex flex-col gap-3 h-64 overflow-y-auto pr-2"></div>
-    </div>
-  </div>
-
-  <!-- MODAL ĐÁNH GIÁ (AI HỒ SƠ BE) -->
-  <div id="modal-eval" class="hidden-view fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-    <div class="bg-white w-full max-w-md rounded-[2rem] p-6 shadow-2xl animate-pop">
-      <div class="text-center mb-4">
-        <div class="text-5xl mb-2">📊</div>
-        <h3 class="text-xl font-bold text-sky-600">Báo Cáo Năng Lực</h3>
-      </div>
-      <div id="eval-content" class="bg-sky-50 rounded-xl p-4 text-sm text-slate-700 h-64 overflow-y-auto border border-sky-100 space-y-3"></div>
-      <button onclick="document.getElementById('modal-eval').classList.add('hidden-view')" class="mt-4 w-full bg-sky-500 text-white font-bold py-3 rounded-2xl active:scale-95">Đóng Báo Cáo</button>
-    </div>
-  </div>
-
   <!-- ========================================== -->
-  <!-- 3. MÀN HÌNH TRÒ CHƠI & KẾT QUẢ             -->
+  <!-- 4. MÀN HÌNH TRÒ CHƠI (GAMEPLAY)            -->
   <!-- ========================================== -->
   <div id="view-game" class="hidden-view w-full h-full max-w-md flex flex-col relative animate-pop bg-[#f0f9ff]">
     <div class="p-4 flex items-center justify-between">
-      <button onclick="app.showMap()" class="w-10 h-10 bg-white rounded-full shadow flex items-center justify-center text-xl text-slate-600 active:scale-90">🔙</button>
-      <div class="flex-grow mx-4 h-4 bg-slate-200 rounded-full overflow-hidden"><div id="progress-bar" class="h-full bg-emerald-400 w-0 transition-all"></div></div>
+      <button onclick="app.backToSubcategories()" class="w-10 h-10 bg-white rounded-full shadow flex items-center justify-center text-xl text-slate-600 active:scale-90">✖</button>
+      <div class="flex-grow mx-4 h-4 bg-slate-200 rounded-full overflow-hidden">
+        <div id="progress-bar" class="h-full bg-emerald-400 w-0 transition-all duration-300"></div>
+      </div>
       <div class="font-bold text-slate-600 text-sm" id="progress-text">0/10</div>
     </div>
     
@@ -134,25 +128,80 @@
     </div>
   </div>
 
+  <!-- ========================================== -->
+  <!-- 5. MÀN HÌNH HOÀN THÀNH BÀI                 -->
+  <!-- ========================================== -->
   <div id="view-result" class="hidden-view fixed inset-0 w-full h-full bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
     <div class="bg-white w-full max-w-sm rounded-[2rem] p-6 shadow-2xl flex flex-col items-center text-center animate-pop">
       <div class="text-6xl mb-2">🎉</div>
       <h2 class="text-2xl font-extrabold text-amber-500 mb-2">Hoàn thành bài!</h2>
       <p class="text-slate-600 font-bold mb-4">Bé nhận được <span class="text-amber-500">+50 ⭐</span></p>
-      <button onclick="app.finishGame()" class="w-full bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold py-4 rounded-2xl active:scale-95 text-lg shadow-lg">Quay về Bản Đồ</button>
+      
+      <!-- Bảng giải nghĩa rút gọn -->
+      <div class="w-full bg-amber-50 rounded-xl p-4 text-left max-h-48 overflow-y-auto mb-6 border border-amber-100 text-sm">
+        <h3 class="font-bold text-amber-800 mb-2 border-b border-amber-200 pb-1">Ghi nhớ nhanh:</h3>
+        <ul id="summary-list" class="space-y-2 text-slate-700"></ul>
+      </div>
+
+      <button onclick="app.backToSubcategories()" class="w-full bg-gradient-to-r from-amber-400 to-orange-500 text-white font-bold py-4 rounded-2xl active:scale-95 text-lg shadow-lg">Tiếp tục học</button>
     </div>
   </div>
 
   <!-- ========================================== -->
-  <!-- KỊCH BẢN LOGIC ĐÃ FIX BUG                  -->
+  <!-- MODAL ĐÁNH GIÁ (AI HỒ SƠ BE)               -->
+  <!-- ========================================== -->
+  <div id="modal-eval" class="hidden-view fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white w-full max-w-md rounded-[2rem] p-6 shadow-2xl animate-pop">
+      <div class="text-center mb-4">
+        <div class="text-5xl mb-2">📊</div>
+        <h3 class="text-xl font-bold text-sky-600">Báo Cáo Năng Lực</h3>
+      </div>
+      <div id="eval-content" class="bg-sky-50 rounded-xl p-4 text-sm text-slate-700 h-64 overflow-y-auto border border-sky-100 space-y-3"></div>
+      <button onclick="document.getElementById('modal-eval').classList.add('hidden-view')" class="mt-4 w-full bg-sky-500 text-white font-bold py-3 rounded-2xl active:scale-95">Đóng</button>
+    </div>
+  </div>
+
+  <!-- ========================================== -->
+  <!-- KỊCH BẢN LOGIC ĐÃ ĐƯỢC XÂY DỰNG LẠI        -->
   <!-- ========================================== -->
   <script>
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('./sw.js').catch(err => console.log('SW fail', err));
-      });
-    }
+    // 1. Dữ liệu mặc định (Bọc lỗi an toàn nếu database.json không tồn tại)
+    const fallbackDB = {
+      categories: [
+        {
+          id: "cat_tuvung", name: "Luyện Từ Vựng", icon: "📚", color: "from-blue-400 to-blue-500",
+          subcategories: [
+            { id: "sub_tughep", name: "Phân Biệt Từ Ghép", skill: "tu_ghep", lessons: 15, type: "classification", btnLeft: "TỪ GHÉP", btnRight: "TỪ LÁY", prompt: "Đây là Từ Ghép hay Từ Láy?" },
+            { id: "sub_tulay", name: "Phân Biệt Từ Láy", skill: "tu_lay", lessons: 15, type: "classification", btnLeft: "TỪ LÁY", btnRight: "TỪ KHÁC", prompt: "Đây là Từ Láy hay không?" },
+            { id: "sub_dongnghia", name: "Từ Đồng Nghĩa", skill: "dong_nghia", lessons: 10, type: "classification", btnLeft: "ĐỒNG NGHĨA", btnRight: "TRÁI NGHĨA", prompt: "Hai từ này Đồng nghĩa hay Trái nghĩa?" },
+            { id: "sub_trainghia", name: "Từ Trái Nghĩa", skill: "trai_nghia", lessons: 10, type: "classification", btnLeft: "TRÁI NGHĨA", btnRight: "ĐỒNG NGHĨA", prompt: "Hai từ này Trái nghĩa hay Đồng nghĩa?" },
+            { id: "sub_tonghop", name: "Ôn Tập Tổng Hợp", skill: "tong_hop", lessons: 15, type: "classification", btnLeft: "TỪ GHÉP", btnRight: "TỪ LÁY", prompt: "Phân loại từ phức sau:" }
+          ]
+        },
+        {
+          id: "cat_cadao", name: "Ca Dao Tục Ngữ", icon: "🌾", color: "from-emerald-400 to-green-500",
+          subcategories: [
+            { id: "sub_cd_gd", name: "Chủ đề Gia Đình", skill: "ca_dao_gd", lessons: 10, type: "quiz", prompt: "Điền vào chỗ trống:" },
+            { id: "sub_tn_daoly", name: "Đạo Lý Làm Người", skill: "tuc_ngu", lessons: 10, type: "quiz", prompt: "Điền vào chỗ trống:" }
+          ]
+        }
+      ],
+      questions: [
+        // Một vài dữ liệu mẫu để chống sập web
+        { skill: "tu_ghep", word: "nhà cửa", correct: "left", desc: "Hai từ có nghĩa ghép lại." },
+        { skill: "tu_ghep", word: "long lanh", correct: "right", desc: "Đây là từ láy." },
+        { skill: "tu_lay", word: "rầm rập", correct: "left", desc: "Láy toàn bộ âm." },
+        { skill: "tu_lay", word: "sách vở", correct: "right", desc: "Đây là từ ghép." },
+        { skill: "ca_dao_gd", word: "Công cha như núi...", correct: "left", btnLeft: "Thái Sơn", btnRight: "biển rộng", desc: "Ca ngợi công lao to lớn của cha." }
+      ],
+      recommendations: {
+        "tu_ghep": "Bé cần nhớ Từ ghép là 2 tiếng đứng riêng đều phải có ý nghĩa nhé.",
+        "tu_lay": "Bé hay nhầm Từ láy. Mẹo: Thử tách 2 từ ra xem có từ nào vô nghĩa không.",
+        "dong_nghia": "Bé cần trau dồi thêm vốn từ đồng nghĩa bằng cách đọc nhiều sách truyện hơn."
+      }
+    };
 
+    // 2. Audio Engine
     const AudioEngine = {
       ctx: new (window.AudioContext || window.webkitAudioContext)(),
       playTone(freq, type, duration) {
@@ -168,150 +217,168 @@
       playWrong() { this.playTone(300, 'sawtooth', 0.3); }
     };
 
+    // 3. Main App Logic
     const app = {
       db: null,
-      stats: { score: 0, unlockedLevel: 1, completedGames: {}, errorLog: {} },
-      currentGameId: null,
-      currentSkill: null,
+      stats: { score: 0, completedLessons: {}, errorLog: {} },
+      
+      currentCatId: null,
+      currentSubConfig: null,
+      currentLessonNumber: 1,
       currentQuestions: [],
       currentIndex: 0,
       
       async init() {
+        // Cố gắng tải file dữ liệu ngoài, nếu lỗi thì xài dữ liệu nội bộ
         try {
           const res = await fetch('./database.json');
-          this.db = await res.json();
+          const data = await res.json();
+          this.db = data.categories ? data : fallbackDB;
         } catch (e) {
-          alert("Lỗi tải dữ liệu. Vui lòng kiểm tra file database.json!"); return;
+          console.warn("Dùng dữ liệu dự phòng vì không tìm thấy database.json");
+          this.db = fallbackDB;
         }
 
-        const savedStats = localStorage.getItem('tv_stats');
+        const savedStats = localStorage.getItem('tv_stats_v2');
         if(savedStats) {
           this.stats = JSON.parse(savedStats);
-          document.getElementById('view-welcome').classList.add('hidden-view');
-          document.getElementById('view-map').classList.remove('hidden-view');
+          this.showDashboard();
         } else {
           document.getElementById('view-welcome').classList.remove('hidden-view');
-          document.getElementById('view-map').classList.add('hidden-view');
         }
 
-        this.updateMapUI();
         window.addEventListener('touchstart', () => { if (AudioEngine.ctx.state === 'suspended') AudioEngine.ctx.resume(); }, { once: true });
       },
 
       saveStats() {
-        localStorage.setItem('tv_stats', JSON.stringify(this.stats));
-        this.updateMapUI();
-      },
-
-      enterMap() {
-        document.getElementById('view-welcome').classList.add('hidden-view');
-        document.getElementById('view-map').classList.remove('hidden-view');
-      },
-
-      showMap() {
-        document.getElementById('view-game').classList.add('hidden-view');
-        document.getElementById('view-result').classList.add('hidden-view');
-        document.getElementById('view-map').classList.remove('hidden-view');
-      },
-
-      updateMapUI() {
+        localStorage.setItem('tv_stats_v2', JSON.stringify(this.stats));
         document.getElementById('global-score').innerText = this.stats.score;
-        
-        for (let lvlId in this.db.levels) {
-          const levelData = this.db.levels[lvlId];
-          const gamesInLevel = levelData.games;
-          
-          let passedCount = 0;
-          gamesInLevel.forEach(g => { if(this.stats.completedGames[g.id]) passedCount++; });
-          
-          const progressEl = document.getElementById(`node-progress-${lvlId}`);
-          if(progressEl) progressEl.innerText = `${passedCount}/${gamesInLevel.length} bài`;
-
-          const node = document.getElementById(`node-level-${lvlId}`);
-          const btn = document.getElementById(`node-btn-${lvlId}`);
-          const lock = document.getElementById(`node-lock-${lvlId}`);
-          const label = document.getElementById(`node-label-${lvlId}`);
-          
-          if (parseInt(lvlId) <= this.stats.unlockedLevel) {
-            if(node) node.classList.remove('opacity-60');
-            if(lock) lock.classList.add('hidden');
-            if(btn) btn.classList.remove('hidden');
-            if(label) label.className = "mt-2 bg-orange-500 text-white text-xs font-bold px-4 py-1.5 rounded-full";
-            
-            if (passedCount >= 3 && this.stats.unlockedLevel == lvlId) {
-              this.stats.unlockedLevel = parseInt(lvlId) + 1;
-              this.saveStats();
-            }
-          }
-        }
       },
 
-      openSubLevelModal(levelId) {
-        if(levelId > this.stats.unlockedLevel) return;
-        
-        const levelData = this.db.levels[levelId];
-        document.getElementById('sublevel-title').innerText = levelData.name;
-        
-        const listEl = document.getElementById('sublevel-list');
-        listEl.innerHTML = '';
-        
-        levelData.games.forEach(game => {
-          const isDone = this.stats.completedGames[game.id];
-          const btnHtml = `
-            <button onclick="app.startGame('${game.id}')" class="w-full flex items-center justify-between p-3 rounded-xl border-2 ${isDone ? 'bg-emerald-50 border-emerald-200' : 'bg-white border-slate-200 hover:border-amber-300'} active:scale-95 transition-all text-left">
-              <div>
-                <div class="font-bold ${isDone ? 'text-emerald-700' : 'text-slate-700'}">${game.title}</div>
+      // --- ĐIỀU HƯỚNG GIAO DIỆN ---
+      hideAll() {
+        ['view-welcome', 'view-dashboard', 'view-subcategories', 'view-game', 'view-result', 'modal-eval'].forEach(id => {
+          document.getElementById(id).classList.add('hidden-view');
+        });
+      },
+
+      enterDashboard() {
+        this.showDashboard();
+      },
+
+      showDashboard() {
+        this.hideAll();
+        document.getElementById('view-dashboard').classList.remove('hidden-view');
+        document.getElementById('global-score').innerText = this.stats.score;
+        this.renderCategories();
+      },
+
+      // Render danh sách Danh mục chính
+      renderCategories() {
+        const list = document.getElementById('category-list');
+        list.innerHTML = '';
+        this.db.categories.forEach(cat => {
+          list.innerHTML += `
+            <div onclick="app.openCategory('${cat.id}')" class="bg-white rounded-[2rem] p-5 shadow-sm border border-slate-100 flex items-center gap-4 active:scale-95 transition-transform cursor-pointer">
+              <div class="w-16 h-16 rounded-2xl bg-gradient-to-br ${cat.color} flex items-center justify-center text-3xl shadow-inner text-white">
+                ${cat.icon}
               </div>
-              <div class="text-2xl">${isDone ? '✅' : '▶️'}</div>
-            </button>
+              <div class="flex-grow">
+                <h3 class="text-xl font-extrabold text-slate-700">${cat.name}</h3>
+                <p class="text-xs font-bold text-slate-400 mt-1">${cat.subcategories.length} Chủ đề ôn luyện</p>
+              </div>
+              <div class="text-slate-300 font-bold text-2xl">➔</div>
+            </div>
           `;
-          listEl.innerHTML += btnHtml;
         });
-
-        document.getElementById('modal-sublevel').classList.remove('hidden-view');
       },
 
-      // FIX BUG: XỬ LÝ LỖI NULL DATA VÀ ĐIỀU HƯỚNG GIAO DIỆN
-      startGame(gameId) {
-        // 1. Tắt Modal trước
-        document.getElementById('modal-sublevel').classList.add('hidden-view');
+      openCategory(catId) {
+        this.currentCatId = catId;
+        const cat = this.db.categories.find(c => c.id === catId);
+        document.getElementById('sub-cat-title').innerText = cat.name;
         
-        // 2. Trích xuất dữ liệu câu hỏi từ CSDL
-        this.currentGameId = gameId;
-        this.currentQuestions = this.db.questions.filter(q => q.game_id === gameId).slice(0, 10);
+        const list = document.getElementById('subcategory-list');
+        list.innerHTML = '';
         
-        // CƠ CHẾ FAIL-SAFE: Nếu JSON chưa có câu hỏi nào cho Game ID này
-        if (this.currentQuestions.length === 0) {
-            alert("Nội dung bài học này đang được cập nhật thêm dữ liệu. Bạn hãy chọn bài khác nhé!");
-            return; // Dừng chạy, giữ nguyên màn hình bản đồ
+        cat.subcategories.forEach(sub => {
+          let lessonButtonsHtml = '';
+          // Khởi tạo nút cho 15 bài học (hoặc tùy cấu hình)
+          for(let i = 1; i <= sub.lessons; i++) {
+            const lessonKey = `${sub.id}_bai${i}`;
+            const isDone = this.stats.completedLessons[lessonKey];
+            lessonButtonsHtml += `
+              <button onclick="app.startLesson('${sub.id}', ${i})" class="lesson-btn flex flex-col items-center justify-center w-[70px] h-[70px] rounded-2xl border-2 ${isDone ? 'bg-emerald-50 border-emerald-400 text-emerald-600' : 'bg-white border-slate-200 text-slate-500 hover:border-amber-300 hover:bg-amber-50'} flex-shrink-0 shadow-sm relative">
+                <span class="font-bold text-xs uppercase mb-1">Bài</span>
+                <span class="font-extrabold text-xl leading-none">${i}</span>
+                ${isDone ? '<span class="absolute -top-2 -right-2 text-sm">⭐</span>' : ''}
+              </button>
+            `;
+          }
+
+          list.innerHTML += `
+            <div class="bg-white rounded-3xl p-4 shadow-sm border border-slate-100">
+              <h4 class="font-extrabold text-slate-700 mb-3 text-lg border-l-4 border-amber-400 pl-3">${sub.name}</h4>
+              <div class="flex gap-3 overflow-x-auto pb-2 pr-4 snap-x">
+                ${lessonButtonsHtml}
+              </div>
+            </div>
+          `;
+        });
+
+        this.hideAll();
+        document.getElementById('view-subcategories').classList.remove('hidden-view');
+      },
+
+      backToSubcategories() {
+        this.hideAll();
+        document.getElementById('view-subcategories').classList.remove('hidden-view');
+        // Re-render để hiện sao nếu vừa chơi xong
+        this.openCategory(this.currentCatId); 
+      },
+
+      // --- LOGIC TRÒ CHƠI & XÁO TRỘN DỮ LIỆU ---
+      startLesson(subId, lessonNumber) {
+        // Tìm thông tin chủ đề
+        let subConfig = null;
+        this.db.categories.forEach(cat => {
+          const found = cat.subcategories.find(s => s.id === subId);
+          if(found) subConfig = found;
+        });
+
+        // 1. Quét kho dữ liệu lấy các câu hỏi thuộc skill này
+        const questionPool = this.db.questions.filter(q => q.skill === subConfig.skill);
+        
+        // CƠ CHẾ BỌC LỖI: Nếu dữ liệu trống
+        if(questionPool.length === 0) {
+          alert("Kho dữ liệu đang cập nhật bài tập cho chủ đề này. Bé chọn bài khác nhé!");
+          return;
         }
-        
-        // 3. Tìm config của game để lấy nút bấm
-        let gameConfig = null;
-        Object.values(this.db.levels).forEach(lvl => {
-          const found = lvl.games.find(g => g.id === gameId);
-          if(found) gameConfig = found;
-        });
-        
-        if (!gameConfig) return;
 
-        this.currentSkill = gameConfig.skill;
-        document.getElementById('game-prompt').innerText = gameConfig.type === 'classification' ? 'Phân loại từ' : 'Điền vào chỗ trống';
+        // 2. THUẬT TOÁN XÁO TRỘN NGẪU NHIÊN (Shuffle Array)
+        const shuffledPool = [...questionPool].sort(() => Math.random() - 0.5);
         
-        // 4. Chuyển đổi màn hình một cách an toàn (Sử dụng DOM Element chuẩn)
-        document.getElementById('view-map').classList.add('hidden-view');
-        document.getElementById('view-game').classList.remove('hidden-view');
+        // Lấy tối đa 10 câu (Nếu kho có ít hơn thì lấy tất cả)
+        this.currentQuestions = shuffledPool.slice(0, 10);
         
+        // Thiết lập biến
+        this.currentSubConfig = subConfig;
+        this.currentLessonNumber = lessonNumber;
         this.currentIndex = 0;
-        this.updateGameUI(gameConfig);
+
+        document.getElementById('game-prompt').innerText = subConfig.prompt || 'Chọn đáp án đúng';
+        
+        this.hideAll();
+        document.getElementById('view-game').classList.remove('hidden-view');
+        this.updateGameUI();
       },
 
-      updateGameUI(gameConfig) {
+      updateGameUI() {
         const item = this.currentQuestions[this.currentIndex];
         document.getElementById('current-word').innerText = item.word;
         
-        document.getElementById('btn-left-text').innerText = item.btnLeft || gameConfig.btnLeft || 'TRÁI';
-        document.getElementById('btn-right-text').innerText = item.btnRight || gameConfig.btnRight || 'PHẢI';
+        document.getElementById('btn-left-text').innerText = item.btnLeft || this.currentSubConfig.btnLeft || 'TRÁI';
+        document.getElementById('btn-right-text').innerText = item.btnRight || this.currentSubConfig.btnRight || 'PHẢI';
 
         const percent = ((this.currentIndex) / this.currentQuestions.length) * 100;
         document.getElementById('progress-bar').style.width = percent + '%';
@@ -333,26 +400,35 @@
           this.currentIndex++;
           
           if (this.currentIndex < this.currentQuestions.length) {
-            let gameConfig;
-            Object.values(this.db.levels).forEach(lvl => {
-              const found = lvl.games.find(g => g.id === this.currentGameId);
-              if(found) gameConfig = found;
-            });
-            this.updateGameUI(gameConfig);
+            this.updateGameUI();
           } else {
-            this.stats.completedGames[this.currentGameId] = true;
-            this.stats.score += 50;
+            // Lưu trạng thái hoàn thành Bài
+            const lessonKey = `${this.currentSubConfig.id}_bai${this.currentLessonNumber}`;
+            // Chỉ cộng điểm nếu là lần đầu hoàn thành bài này
+            if(!this.stats.completedLessons[lessonKey]) {
+               this.stats.score += 50;
+            }
+            this.stats.completedLessons[lessonKey] = true;
             this.saveStats();
             
-            document.getElementById('view-game').classList.add('hidden-view');
+            // Hiện kết quả
+            const list = document.getElementById('summary-list');
+            list.innerHTML = '';
+            this.currentQuestions.forEach(q => {
+              list.innerHTML += `<li class="mb-2"><b>- ${q.word}</b>: ${q.desc}</li>`;
+            });
+            
+            this.hideAll();
             document.getElementById('view-result').classList.remove('hidden-view');
             AudioEngine.playCorrect();
           }
         } else {
           AudioEngine.playWrong();
           
-          if(!this.stats.errorLog[this.currentSkill]) this.stats.errorLog[this.currentSkill] = 0;
-          this.stats.errorLog[this.currentSkill]++;
+          // Ghi nhận lỗi cho AI Đánh giá
+          const skill = this.currentSubConfig.skill;
+          if(!this.stats.errorLog[skill]) this.stats.errorLog[skill] = 0;
+          this.stats.errorLog[skill]++;
           this.saveStats();
 
           const card = document.getElementById('word-card');
@@ -372,10 +448,7 @@
         }
       },
 
-      finishGame() {
-        this.showMap();
-      },
-
+      // --- HỆ THỐNG ĐÁNH GIÁ (AI HỒ SƠ BE) ---
       showEvaluation() {
         const evalBox = document.getElementById('eval-content');
         evalBox.innerHTML = '';
@@ -389,9 +462,9 @@
             const recText = this.db.recommendations[skill] || "Bé cần luyện tập thêm phần này nhé.";
             evalBox.innerHTML += `
               <div class="bg-white p-3 rounded-lg border-l-4 border-orange-400 shadow-sm">
-                <span class="font-bold text-orange-600">⚠️ Chủ đề: ${skill.toUpperCase()}</span>
+                <span class="font-bold text-orange-600">⚠️ Chủ đề cần ôn lại</span>
                 <p class="mt-1">${recText}</p>
-                <p class="text-xs text-slate-400 mt-1 font-bold">Số lần trả lời sai: ${errCount}</p>
+                <p class="text-xs text-slate-400 mt-1 font-bold">Số lần làm sai: ${errCount}</p>
               </div>
             `;
           }
@@ -401,7 +474,7 @@
           evalBox.innerHTML = `
             <div class="flex flex-col items-center justify-center h-full text-center">
               <span class="text-4xl mb-2">🌟</span>
-              <p class="font-bold text-emerald-600 mt-2">Tuyệt vời! Bé chưa có điểm yếu nào đáng lo ngại. Hãy tiếp tục phát huy nhé!</p>
+              <p class="font-bold text-emerald-600 mt-2">Tuyệt vời! Hệ thống chưa phát hiện lỗ hổng kiến thức nào của bé. Tiếp tục học nhé!</p>
             </div>
           `;
         }
@@ -410,7 +483,6 @@
       }
     };
 
-    // Khởi chạy ứng dụng
     app.init();
   </script>
 </body>
