@@ -1,0 +1,44 @@
+{
+  "levels": {
+    "1": {
+      "name": "Luyện Từ Vựng",
+      "games": [
+        { "id": "L1_G1", "title": "Phân biệt Từ Ghép", "skill": "tu_ghep", "type": "classification", "btnLeft": "TỪ GHÉP", "btnRight": "TỪ KHÁC" },
+        { "id": "L1_G2", "title": "Phân biệt Từ Láy", "skill": "tu_lay", "type": "classification", "btnLeft": "TỪ LÁY", "btnRight": "TỪ KHÁC" },
+        { "id": "L1_G3", "title": "Từ Đồng Nghĩa", "skill": "dong_nghia", "type": "classification", "btnLeft": "ĐỒNG NGHĨA", "btnRight": "TRÁI NGHĨA" },
+        { "id": "L1_G4", "title": "Từ Trái Nghĩa", "skill": "trai_nghia", "type": "classification", "btnLeft": "TRÁI NGHĨA", "btnRight": "ĐỒNG NGHĨA" },
+        { "id": "L1_G5", "title": "Ôn tập tổng hợp", "skill": "tong_hop", "type": "classification", "btnLeft": "TỪ LÁY", "btnRight": "TỪ GHÉP" }
+      ]
+    },
+    "2": {
+      "name": "Đỉnh Ca Dao",
+      "games": [
+        { "id": "L2_G1", "title": "Công ơn Cha Mẹ", "skill": "ca_dao", "type": "quiz" },
+        { "id": "L2_G2", "title": "Tôn sư trọng đạo", "skill": "ca_dao", "type": "quiz" },
+        { "id": "L2_G3", "title": "Lòng biết ơn", "skill": "tuc_ngu", "type": "quiz" },
+        { "id": "L2_G4", "title": "Đạo lý làm người", "skill": "tuc_ngu", "type": "quiz" },
+        { "id": "L2_G5", "title": "Đồng dao dân gian", "skill": "dong_dao", "type": "quiz" }
+      ]
+    }
+  },
+  "questions": [
+    {"game_id": "L1_G1", "word": "học hành", "correct": "left", "desc": "Cả hai từ đều có nghĩa chỉ việc học."},
+    {"game_id": "L1_G1", "word": "lung linh", "correct": "right", "desc": "Đây là từ láy vần, không phải từ ghép."},
+    {"game_id": "L1_G2", "word": "mếu máo", "correct": "left", "desc": "Láy phụ âm đầu 'm'."},
+    {"game_id": "L1_G2", "word": "nhà cửa", "correct": "right", "desc": "Đây là từ ghép, không phải từ láy."},
+    {"game_id": "L1_G3", "word": "To lớn - Vĩ đại", "correct": "left", "desc": "Hai từ này có nghĩa giống nhau."},
+    {"game_id": "L1_G4", "word": "Cao - Thấp", "correct": "left", "desc": "Hai từ này mang nghĩa trái ngược nhau."},
+    {"game_id": "L1_G5", "word": "rầm rập", "correct": "left", "desc": "Từ láy toàn bộ."},
+    
+    {"game_id": "L2_G1", "word": "Công cha như núi...", "btnLeft": "ngất trời", "btnRight": "Thái Sơn", "correct": "left", "desc": "Câu ca dao ca ngợi công cha to lớn."},
+    {"game_id": "L2_G2", "word": "Muốn sang thì bắc...", "btnLeft": "cầu kiều", "btnRight": "cầu khỉ", "correct": "left", "desc": "Nhắc nhở học trò phải biết kính trọng thầy."},
+    {"game_id": "L2_G3", "word": "Ăn quả nhớ kẻ...", "btnLeft": "trồng cây", "btnRight": "hái quả", "correct": "left", "desc": "Phải biết ơn người đã tạo ra thành quả cho mình hưởng."},
+    {"game_id": "L2_G4", "word": "Đói cho sạch, rách cho...", "btnLeft": "thơm", "btnRight": "đẹp", "correct": "left", "desc": "Dù khó khăn vẫn phải giữ gìn phẩm chất trong sáng."}
+  ],
+  "recommendations": {
+    "tu_lay": "Bé đang hay nhầm lẫn Từ Láy. Khuyến nghị: Ba mẹ hướng dẫn bé cách tách 2 tiếng ra xem có tiếng nào vô nghĩa không nhé.",
+    "tu_ghep": "Bé cần ôn lại Từ Ghép. Khuyến nghị: Giúp bé hiểu từ ghép là sự kết hợp của 2 tiếng đều có nghĩa độc lập.",
+    "ca_dao": "Bé chưa thuộc nhiều Ca dao. Khuyến nghị: Ba mẹ có thể đọc ca dao cho bé nghe trước khi đi ngủ để bé ngấm vần điệu.",
+    "dong_nghia": "Bé hay nhầm từ Đồng nghĩa / Trái nghĩa. Khuyến nghị: Cho bé chơi trò chơi tìm từ trái ngược với từ ba mẹ đưa ra."
+  }
+}
